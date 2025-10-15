@@ -58,6 +58,7 @@ int gpi_stop_delay = 0;
 bool hotspot_on = true;
 bool buzzer_on = false;
 bool decode_gtin = true;
+bool fs_loaded = true;
 
 // ==================== Watchdog ====================
 #define WATCHDOG_TIMEOUT 10

@@ -200,6 +200,8 @@ private:
 		if (gtin == "00000000000000")
 			return "";
 
+		if (gtin[0] == '0')
+			gtin = gtin.substring(1);
 		return gtin;
 	}
 };

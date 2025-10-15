@@ -8,7 +8,7 @@ void setup()
   if (!LittleFS.begin())
   {
     Serial.println("Erro ao iniciar LittleFS!");
-    return;
+    fs_loaded = false;
   }
 
   // Configura o Watchdog para ambos os núcleos
@@ -20,7 +20,8 @@ void setup()
   esp_task_wdt_add(NULL);
 
   // Carrega configurações
-  config_file_commands.get_config();
+  if (fs_loaded)
+    config_file_commands.get_config();
 
   // Inicializa módulos
   myserial.setup();
