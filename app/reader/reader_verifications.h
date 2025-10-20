@@ -1,4 +1,4 @@
-class reader_verifications
+class reader_verifications : public commands_reader
 {
 public:
 	void reader_verify()
@@ -42,6 +42,19 @@ public:
 		}
 	}
 
+	void try_change_baudrate()
+	{
+		Serial2.end();
+		delay(100);
+		Serial2.begin(57600, SERIAL_8N1, rx_reader_module, tx_reader_module);
+		delay(300);
+		byte start[] = {0x05, 0xff, 0x28, 0x06};
+		crcValue = uiCrc16Cal(start, sizeof(start));
+		crc1 = crcValue & 0xFF;
+		crc2 = (crcValue >> 8) & 0xFF;
+		write_bytes(start, sizeof(start), crc1, crc2);
+	}
+
 	void check_reader_connection()
 	{
 		const int timeout_reader_connection = 5000;
@@ -50,6 +63,7 @@ public:
 			current_timeout_reader_connection = millis();
 		if (millis() - current_timeout_reader_connection > timeout_reader_connection)
 		{
+			try_change_baudrate();
 			myserial.write("#RESTART");
 			ESP.restart();
 		}

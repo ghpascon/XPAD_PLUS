@@ -3,14 +3,8 @@ extern READER reader_module;
 extern const bool one_ant;
 
 extern bool read_on;
-bool last_read_on = false;
 
 extern TAG_COMMANDS tag_commands;
-
-bool write_tag_on = false;
-String current_epc;
-String new_epc;
-String password;
 
 extern bool answer_rec;
 

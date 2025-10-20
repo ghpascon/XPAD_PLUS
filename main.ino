@@ -30,6 +30,7 @@ void setup()
   last_packs.clear();
   rgb.setup();
   pins.setup();
+  reader_module.setup();
 
   // Pausa para estabilidade
   delay(500);

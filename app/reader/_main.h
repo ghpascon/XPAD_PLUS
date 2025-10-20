@@ -1,5 +1,5 @@
 #include "vars.h"
-#include "reader__commands.h"
+#include "reader_commands.h"
 #include "reader_periodic.h"
 #include "reader_read_commands.h"
 #include "reader_serial.h"
@@ -10,6 +10,11 @@
 class READER : public serial_reader, public reader_read_on_commands, public reader_write_commands, public setup_commands_reader, public periodic_commands_reader, public reader_verifications
 {
 public:
+	void setup()
+	{
+		Serial2.begin(115200, SERIAL_8N1, rx_reader_module, tx_reader_module);
+	}
+
 	void functions()
 	{
 		check_serial();
@@ -20,7 +25,7 @@ public:
 
 		if (!setup_done)
 		{
-			setup();
+			config_reader();
 			return;
 		}
 
@@ -40,7 +45,7 @@ public:
 		step = 0;
 	}
 
-	void setup()
+	void config_reader()
 	{
 		if (step == 0)
 			start_reader();

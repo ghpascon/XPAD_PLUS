@@ -7,7 +7,6 @@ public:
     void setup()
     {
         Serial.begin(115200);
-        Serial2.begin(115200, SERIAL_8N1, rx_reader_module, tx_reader_module);
 
         setup_bt();
 

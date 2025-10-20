@@ -1,6 +1,7 @@
 #define PRESET_VALUE 0xFFFF
 #define POLYNOMIAL 0x8408
-
+#define tx_reader_module 13
+#define rx_reader_module 14
 unsigned int crcValue;
 byte crc1, crc2;
 
