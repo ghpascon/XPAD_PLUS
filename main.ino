@@ -1,4 +1,6 @@
 // 2025-10-29
+#include "helpers.h"
+#include "pins.h"
 #include "libs.h"
 #include "vars.h"
 
@@ -25,6 +27,7 @@ void setup()
         config_file_commands.get_config();
 
     // Initialize modules
+    connection.setup();
     myserial.setup();
     web_server.setup();
     tag_commands.clear_tags();

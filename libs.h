@@ -6,6 +6,7 @@
 #include <LittleFS.h>
 
 // ==================== app ====================
+#include "app/connection/_main.h"
 #include "app/myserial/_main.h"
 #include "app/pins/_main.h"
 #include "app/antena/_main.h"

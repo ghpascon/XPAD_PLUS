@@ -24,10 +24,7 @@ public:
 
     void config_web_server()
     {
-        uint64_t chipid = ESP.getEfuseMac(); // Obtém o MAC único
-        char id_str[13];
-        sprintf(id_str, "%012llX", chipid);                // Converte para string hexadecimal
-        const String ssid = "XPAD_PLUS-" + String(id_str); // Cria o SSID
+        const String ssid = get_esp_name();
         const char *password = "smartx12345";
         WiFi.softAP(ssid.c_str(), password);
     }

@@ -16,6 +16,7 @@ int current_tag = 0;
 TAG_COMMANDS tag_commands;
 
 // ==================== Serial ====================
+CONNECTION connection;
 MySerial myserial;
 MySerialCheck myserialcheck;
 bool simple_send = false;
