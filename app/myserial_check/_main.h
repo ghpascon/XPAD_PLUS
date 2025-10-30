@@ -52,7 +52,7 @@ public:
 
     void check_commands(String cmd)
     {
-        if (cmd == "#ping")
+        if (cmd == "#ping" || cmd == "ping")
         {
             myserial.write("#PONG");
         }
@@ -125,10 +125,7 @@ public:
 
         else if (cmd == "#get_serial")
         {
-            uint64_t chipid = ESP.getEfuseMac();
-            char id_str[13];
-            sprintf(id_str, "%012llX", chipid);
-            myserial.write("#SERIAL:" + String(id_str));
+            myserial.write("#SERIAL:" + get_esp_name());
         }
 
         else if (cmd.startsWith("readmode"))
@@ -186,6 +183,14 @@ public:
         else if (cmd.startsWith("#decode_gtin:"))
         {
             decode_gtin = cmd.endsWith("on");
+        }
+
+        else if (cmd == "#get_info")
+        {
+            myserial.write("#NAME:" + get_esp_name());
+            myserial.write("#BT_MAC:" + get_bt_mac());
+            myserial.write("#ETH_MAC:" + String(ETH.macAddress()));
+            myserial.write("#IP:" + ETH.localIP().toString());
         }
 
         else

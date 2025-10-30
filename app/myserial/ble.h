@@ -48,11 +48,7 @@ class ServerCallbacks : public BLEServerCallbacks
 // ==================== Setup ====================
 void setup_bt()
 {
-    uint64_t chipid = ESP.getEfuseMac();
-    char id_str[13];
-    sprintf(id_str, "%012llX", chipid);
-    const String bt_name = "XPAD_PLUS-" + String(id_str);
-    BLEDevice::init(bt_name.c_str());
+    BLEDevice::init(get_esp_name().c_str());
 
     pServer = BLEDevice::createServer();
     pServer->setCallbacks(new ServerCallbacks());

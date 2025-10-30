@@ -27,6 +27,7 @@ public:
 
     void write(const String &data, bool all = false)
     {
+        Serial.println(data);
         if (!all && simple_send)
             return;
 
@@ -88,6 +89,8 @@ public:
 
         cmd.toLowerCase();
         cmd.replace("  ", " ");
+        cmd.replace("\r", "");
+        cmd.replace("\n", "");
 
         return cmd;
     }
