@@ -8,18 +8,6 @@ body {
   align-items: center;
 }
 
-@font-face {
-  font-family: "FONT_SMARTX";
-  src: url("/FONT_SMARTX.woff");
-  font-weight: normal;
-  font-style: normal;
-}
-.SMTX {
-  font-family: "FONT_SMARTX", sans-serif;
-  font-size: 80px;
-  color: #ffb41f;
-}
-
 h1 {
   font-family: Arial, sans-serif;
   font-size: 60px;
@@ -119,7 +107,7 @@ form {
 }
 
 /*cor de fundo checked*/
-.checkbox input:checked ~ .checkmark {
+.checkbox input:checked~.checkmark {
   background-color: #ffb41f;
 }
 
@@ -137,7 +125,7 @@ form {
   transform: rotate(45deg);
 }
 
-.checkbox input:checked ~ .checkmark:after {
+.checkbox input:checked~.checkmark:after {
   display: block;
 }
 
@@ -200,6 +188,7 @@ tbody tr:nth-child(odd) {
   font-family: Arial, sans-serif;
   font-size: 45px;
 }
+
 .table_2 tr:nth-child(even) {
   background-color: #cccccc;
   color: #000000;
@@ -234,6 +223,7 @@ tbody tr:nth-child(odd) {
   font-family: Arial, sans-serif;
   font-size: 30px;
 }
+
 .table_tags tr:nth-child(even) {
   background-color: #cccccc;
   color: #000000;
@@ -270,10 +260,12 @@ tbody tr:nth-child(odd) {
   padding-left: 15px;
   padding-right: 15px;
 }
+
 .table_last_packs tr:nth-child(odd) {
   background-color: #ffffff;
   color: #000000;
 }
+
 .table_last_packs tr:nth-child(even) {
   background-color: #cccccc;
   color: #000000;
@@ -327,4 +319,26 @@ select:focus {
   margin: 20px;
   background-color: #555555;
   border: 2px solid #ffffff;
+}
+
+a {
+  font-size: 45px;
+  color: #000000;
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  border: 2px solid #000000;
+  border-radius: 25px;
+  background-color: #ffb41f;
+  cursor: pointer;
+  word-wrap: break-word;
+  width: 300px;
+  text-decoration: none;
+  text-align: center;
+  display: block;
+  margin: 20px auto;
+}
+
+a:hover {
+  background-color: #000000;
+  color: #ffb41f;
 }

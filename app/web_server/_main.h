@@ -32,34 +32,31 @@ public:
     void style_web_server()
     {
         server.on("/style.css", HTTP_GET, [](AsyncWebServerRequest *request)
-                  { request->send(LittleFS, "/html/style.css", "text/css"); });
-
-        server.on("/FONT_SMARTX.woff", HTTP_GET, [](AsyncWebServerRequest *request)
-                  { request->send(LittleFS, "/html/FONT_SMARTX.woff", "font/woff"); });
+                  { request->send(200, "text/css", style()); });
     }
 
     void routes_web_server()
     {
         server.on("/", HTTP_GET, [](AsyncWebServerRequest *request)
-                  { request->send(LittleFS, "/html/home.html", "text/html"); });
+                  { request->send(200, "text/html", index_page()); });
 
-        server.on("/reader", HTTP_GET, [](AsyncWebServerRequest *request)
-                  { request->send(LittleFS, "/html/reader.html", "text/html"); });
+        // server.on("/reader", HTTP_GET, [](AsyncWebServerRequest *request)
+        //           { request->send(LittleFS, "/html/reader.html", "text/html"); });
 
         server.on("/ant_config", HTTP_GET, [](AsyncWebServerRequest *request)
-                  { request->send(LittleFS, one_ant ? "/html/one_ant_config.html" : "/html/ant_config.html", "text/html"); });
+                  { request->send(200, "text/html", one_ant ? one_ant_config_page() : ant_config_page()); });
 
-        server.on("/reader_config", HTTP_GET, [](AsyncWebServerRequest *request)
-                  { request->send(LittleFS, "/html/reader_config.html", "text/html"); });
+        // server.on("/reader_config", HTTP_GET, [](AsyncWebServerRequest *request)
+        //           { request->send(LittleFS, "/html/reader_config.html", "text/html"); });
 
-        server.on("/reader_modes", HTTP_GET, [](AsyncWebServerRequest *request)
-                  { request->send(LittleFS, "/html/reader_modes.html", "text/html"); });
+        // server.on("/reader_modes", HTTP_GET, [](AsyncWebServerRequest *request)
+        //           { request->send(LittleFS, "/html/reader_modes.html", "text/html"); });
 
-        server.on("/gpo_test", HTTP_GET, [](AsyncWebServerRequest *request)
-                  { request->send(LittleFS, "/html/gpo_test.html", "text/html"); });
+        // server.on("/gpo_test", HTTP_GET, [](AsyncWebServerRequest *request)
+        //           { request->send(LittleFS, "/html/gpo_test.html", "text/html"); });
 
-        server.on("/last_packs", HTTP_GET, [](AsyncWebServerRequest *request)
-                  { request->send(LittleFS, "/html/last_packs.html", "text/html"); });
+        // server.on("/last_packs", HTTP_GET, [](AsyncWebServerRequest *request)
+        //           { request->send(LittleFS, "/html/last_packs.html", "text/html"); });
     }
     void script_web_server()
     {

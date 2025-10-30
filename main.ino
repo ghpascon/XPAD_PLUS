@@ -7,13 +7,6 @@
 // ==================== Setup ====================
 void setup()
 {
-    // Initialize the file system
-    if (!LittleFS.begin())
-    {
-        Serial.println("Error initializing LittleFS!");
-        fs_loaded = false;
-    }
-
     // Configure the Watchdog for both cores
     esp_task_wdt_config_t wdt_config = {
         .timeout_ms = WATCHDOG_TIMEOUT * 1000,
@@ -23,8 +16,7 @@ void setup()
     esp_task_wdt_add(NULL);
 
     // Load configuration
-    if (fs_loaded)
-        config_file_commands.get_config();
+    load_config();
 
     // Initialize modules
     connection.setup();
@@ -61,5 +53,5 @@ void loop()
     pins.set_outputs();
 
     // Save configuration
-    config_file_commands.save_config();
+    save_config();
 }

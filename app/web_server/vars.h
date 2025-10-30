@@ -27,8 +27,6 @@ extern byte temperatura;
 extern byte session;
 extern byte max_session;
 
-extern CONFIG_FILE config_file_commands;
-
 extern bool start_reading;
 extern bool gpi_start;
 extern int gpi_stop_delay;

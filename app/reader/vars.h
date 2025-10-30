@@ -22,8 +22,6 @@ const int timeout_serial_rec = 100;
 unsigned long current_timeout_serial_rec = 0;
 bool answer_rec = true;
 
-// config
-extern CONFIG_FILE config_file_commands;
 
 // tags
 extern TAG_COMMANDS tag_commands;
