@@ -57,4 +57,26 @@ void all_script()
             request->send(500, "text/plain", "Erro ao finalizar a atualizacao: ");
         }
     } });
+
+  server.on("/update_fs", HTTP_POST, [](AsyncWebServerRequest *request)
+            {
+    request->send(200, "text/plain", (Update.hasError()) ? "Falha" : "Sucesso");
+    ESP.restart(); }, [](AsyncWebServerRequest *request, String filename, size_t index, uint8_t *data, size_t len, bool final)
+            {
+    if (index == 0) {
+      Serial.printf("Recebendo %s\n", filename.c_str());
+      if (!Update.begin(UPDATE_SIZE_UNKNOWN, U_SPIFFS, 0x290000)) {
+        Update.printError(Serial);
+      }
+    }
+    if (Update.write(data, len) != len) {
+      Update.printError(Serial);
+    }
+    if (final) {
+      if (Update.end(true)) {
+        Serial.println("Atualização do FS concluída");
+      } else {
+        Update.printError(Serial);
+      }
+    } });
 }

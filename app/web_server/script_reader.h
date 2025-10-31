@@ -1,7 +1,7 @@
 void reader_script()
 {
-    server.on("/reader_html_info", HTTP_GET, [](AsyncWebServerRequest *request)
-              {
+  server.on("/reader_html_info", HTTP_GET, [](AsyncWebServerRequest *request)
+            {
     const int row = 5;
     const int col = 2;
     const String json_kv[row][col] = {
@@ -20,9 +20,57 @@ void reader_script()
 
     request->send(200, "application/json", json); });
 
-    server.on("/tags_table_att", HTTP_GET, [](AsyncWebServerRequest *request)
-              {
-            String json = "[" + tags_table + "]";
-            json.replace(",]", "]");
-            request->send(200, "application/json", json); });
+  server.on("/tags_table_att", HTTP_GET, [](AsyncWebServerRequest *request)
+            {
+      // Snapshot com cap para evitar cópias gigantes que causem OOM
+      const int SNAPSHOT_LIMIT = 30;
+      String json = "[]";
+
+      if (tags_mutex == nullptr)
+      {
+        request->send(500, "application/json", "[]");
+        return;
+      }
+
+      if (xSemaphoreTake(tags_mutex, (TickType_t)50) != pdTRUE)
+      {
+        // busy
+        request->send(503, "application/json", "[]");
+        return;
+      }
+
+      // Copy up to SNAPSHOT_LIMIT entries into local arrays
+      String epc_list[SNAPSHOT_LIMIT];
+      String tid_list[SNAPSHOT_LIMIT];
+      int ant_list[SNAPSHOT_LIMIT];
+      int rssi_list[SNAPSHOT_LIMIT];
+      int cnt = 0;
+      for (int i = 0; i < max_tags && cnt < SNAPSHOT_LIMIT; i++) {
+        if (tags[i].epc == "")
+          break;
+        epc_list[cnt] = tags[i].epc;
+        tid_list[cnt] = tags[i].tid;
+        ant_list[cnt] = tags[i].ant_number;
+        rssi_list[cnt] = tags[i].rssi;
+        cnt++;
+      }
+
+      xSemaphoreGive(tags_mutex);
+
+      // Build JSON from snapshot
+      json = "[";
+      for (int i = 0; i < cnt; i++) {
+        String epc_display = epc_list[i];
+        if (epc_display.length() > 1) {
+          epc_display = epc_display.substring(0, epc_display.length() / 2) + "<br>" + epc_display.substring(epc_display.length() / 2);
+        }
+        String tid_display = tid_list[i];
+        if (tid_display.length() > 1) {
+          tid_display = tid_display.substring(0, tid_display.length() / 2) + "<br>" + tid_display.substring(tid_display.length() / 2);
+        }
+        json += "[\"" + String(i + 1) + "\",\"" + epc_display + "\",\"" + tid_display + "\",\"" + String(ant_list[i]) + "\",\"" + String(rssi_list[i]) + "\"],";
+      }
+      json += "]";
+      json.replace(",]", "]");
+      request->send(200, "application/json", json); });
 }

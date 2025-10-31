@@ -11,7 +11,6 @@ BLEServer *pServer = nullptr;
 BLECharacteristic *pTxCharacteristic = nullptr;
 BLEAdvertising *pAdvertising = nullptr;
 
-bool btConnected = false;
 String bt_cmd = "";
 
 // ==================== Callbacks ====================

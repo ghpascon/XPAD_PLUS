@@ -78,7 +78,6 @@ private:
             bool matched = false;
             handle_boolean_command(cmd, "start_reading:", start_reading, matched);
             handle_boolean_command(cmd, "gpi_start:", gpi_start, matched);
-            handle_boolean_command(cmd, "ignore_read:", ignore_read, matched);
             handle_boolean_command(cmd, "always_send:", always_send, matched);
             handle_boolean_command(cmd, "simple_send:", simple_send, matched);
             handle_boolean_command(cmd, "keyboard:", keyboard, matched);

@@ -10,7 +10,7 @@
       <div class="container1">
         <div class="container2">
           <label style="position: relative; top: 20px" class="SMTX"
-            >XPAD_PLUS-SMARTX</label
+            >XPAD_PLUS</label
           >
         </div>
         <div class="container2">
@@ -41,7 +41,7 @@
           <label id="reading"></label>
         </div>
         <div class="container_display">
-          <label>Temperature:</label>
+          <label>Temp:</label>
           <label id="temperature"></label>
         </div>
       </div>
@@ -67,7 +67,7 @@
     function update_html() {
       get_reader_info();
     }
-    setInterval(update_html, 500);
+    setInterval(update_html, 1000);
 
     function get_reader_info() {
       fetch("/reader_html_info")

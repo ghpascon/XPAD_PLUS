@@ -10,7 +10,7 @@
       <div class="container1">
         <div class="container2">
           <label style="position: relative; top: 20px" class="SMTX"
-            >XPAD_PLUS-SMARTX</label
+            >XPAD_PLUS</label
           >
         </div>
         <div class="container2">
@@ -55,12 +55,6 @@
             <tr>
               <td>
                 <label>IGNORE READ:</label>
-              </td>
-              <td>
-                <button
-                  id="ignore_read_button"
-                  onclick="fetch('/ignore_read')"
-                ></button>
               </td>
             </tr>
 
@@ -131,7 +125,7 @@
     function update_html() {
       update_elements();
     }
-    setInterval(update_html, 500);
+    setInterval(update_html, 1000);
 
     function update_elements() {
       fetch("/modes_att")
@@ -147,11 +141,6 @@
           document.getElementById(
             "start_reading_button"
           ).style.backgroundColor = data.start_reading_color;
-
-          document.getElementById("ignore_read_button").innerText =
-            data.ignore_read_label;
-          document.getElementById("ignore_read_button").style.backgroundColor =
-            data.ignore_read_color;
 
           document.getElementById("always_send_button").innerText =
             data.always_send_label;
@@ -173,8 +162,7 @@
           document.getElementById("buzzer_button").style.backgroundColor =
             data.buzzer_color;
 
-          document.getElementById("gtin_button").innerText =
-            data.gtin_label;
+          document.getElementById("gtin_button").innerText = data.gtin_label;
           document.getElementById("gtin_button").style.backgroundColor =
             data.gtin_color;
         })

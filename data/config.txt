@@ -6,7 +6,6 @@ session:1
 start_reading:off
 gpi_start:off
 gpi_stop_delay:0
-ignore_read:off
 always_send:off
 simple_send:off
 hotspot_on:on

@@ -1,3 +1,6 @@
+// FreeRTOS semaphore type
+#include <freertos/semphr.h>
+
 // ==================== Antena ====================
 const bool one_ant = true;
 
@@ -10,7 +13,7 @@ const byte min_rssi = 40;
 byte write_power = 28;
 
 // ==================== Tags ====================
-const int max_tags = 1000;
+const int max_tags = 300;
 TAG tags[max_tags];
 int current_tag = 0;
 TAG_COMMANDS tag_commands;
@@ -31,6 +34,9 @@ READER reader_module;
 // ==================== Servidor Web ====================
 WEB_SERVER web_server;
 
+// ==================== Configurações ====================
+CONFIG_FILE config_file_commands;
+
 // ==================== LEDs RGB ====================
 LED_RGB rgb;
 
@@ -42,13 +48,7 @@ byte max_session = 0x03;
 // ==================== Modos ====================
 bool start_reading = false;
 bool gpi_start = false;
-bool ignore_read = false;
 bool always_send = false;
-
-// ==================== Últimos pacotes ====================
-LAST_PACKS last_packs;
-const int max_packs = 10;
-String last_packs_read[max_packs];
 
 // ==================== Globais gerais ====================
 byte temperatura = 0;
@@ -56,6 +56,12 @@ int gpi_stop_delay = 0;
 bool hotspot_on = true;
 bool buzzer_on = false;
 bool decode_gtin = true;
+bool fs_loaded = true;
 
 // ==================== Watchdog ====================
 #define WATCHDOG_TIMEOUT 10
+
+bool btConnected = false;
+bool eth_connected = false;
+// Mutex para proteger acesso ao array `tags`
+SemaphoreHandle_t tags_mutex = nullptr;

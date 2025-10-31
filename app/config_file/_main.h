@@ -86,11 +86,6 @@ private:
 			parameter.replace("gpi_stop_delay:", "");
 			gpi_stop_delay = parameter.toInt();
 		}
-		else if (parameter.startsWith("ignore_read:"))
-		{
-			parameter.replace("ignore_read:", "");
-			ignore_read = (parameter == "on");
-		}
 		else if (parameter.startsWith("always_send:"))
 		{
 			parameter.replace("always_send:", "");
@@ -153,7 +148,6 @@ public:
 		new_config += "start_reading:" + String(start_reading ? "on" : "off") + "\n";
 		new_config += "gpi_start:" + String(gpi_start ? "on" : "off") + "\n";
 		new_config += "gpi_stop_delay:" + String(gpi_stop_delay) + "\n";
-		new_config += "ignore_read:" + String(ignore_read ? "on" : "off") + "\n";
 		new_config += "always_send:" + String(always_send ? "on" : "off") + "\n";
 		new_config += "simple_send:" + String(simple_send ? "on" : "off") + "\n";
 		new_config += "hotspot_on:" + String(hotspot_on ? "on" : "off") + "\n";

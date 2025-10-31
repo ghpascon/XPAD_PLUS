@@ -2,15 +2,13 @@ void reader_modes_script()
 {
   server.on("/modes_att", HTTP_GET, [](AsyncWebServerRequest *request)
             {
-    const int row = 16;
+    const int row = 14;
     const int col = 2;
     const String json_kv[row][col] = {
         {"gpi_start_label", String(start_reading ? "START READING" : (gpi_start ? "ON" : "OFF"))},
         {"gpi_start_color", String(start_reading ? "#cccccc" : (gpi_start ? "#00ff00" : "#ff0000"))},
         {"start_reading_label", String(start_reading ? "ON" : "OFF")},
         {"start_reading_color", String(start_reading ? "#00ff00" : "#ff0000")},
-        {"ignore_read_label", String(ignore_read ? "ON" : "OFF")},
-        {"ignore_read_color", String(ignore_read ? "#00ff00" : "#ff0000")},
         {"always_send_label", String(always_send ? "ON" : "OFF")},
         {"always_send_color", String(always_send ? "#00ff00" : "#ff0000")},
         {"simple_send_label", String(simple_send ? "ON" : "OFF")},
@@ -50,12 +48,6 @@ void reader_modes_script()
         gpi_start = !gpi_start;
         
         request->send(200, "application/json", String(gpi_start)); });
-
-  server.on("/ignore_read", HTTP_GET, [](AsyncWebServerRequest *request)
-            { 
-        ignore_read = !ignore_read;
-        
-        request->send(200, "application/json", String(ignore_read)); });
 
   server.on("/always_send", HTTP_GET, [](AsyncWebServerRequest *request)
             { 

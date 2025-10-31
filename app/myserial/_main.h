@@ -28,11 +28,14 @@ public:
     void write(const String &data, bool all = false)
     {
         Serial.println(data);
+
         if (!all && simple_send)
             return;
 
-        connection.telnet_write(data);
-        write_bt(data);
+        if (eth_connected)
+            connection.telnet_write(data);
+        if (btConnected)
+            write_bt(data);
 
         if (keyboard)
         {
@@ -86,11 +89,8 @@ public:
         {
             cmd = connection.check_telnet();
         }
-
         cmd.toLowerCase();
         cmd.replace("  ", " ");
-        cmd.replace("\r", "");
-        cmd.replace("\n", "");
 
         return cmd;
     }

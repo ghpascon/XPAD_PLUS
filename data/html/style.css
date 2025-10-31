@@ -8,6 +8,19 @@ body {
   align-items: center;
 }
 
+@font-face {
+  font-family: "FONT_SMARTX";
+  src: url("/FONT_SMARTX.woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+.SMTX {
+  font-family: "FONT_SMARTX", sans-serif;
+  font-size: 80px;
+  color: #ffb41f;
+}
+
 h1 {
   font-family: Arial, sans-serif;
   font-size: 60px;
@@ -231,45 +244,7 @@ tbody tr:nth-child(odd) {
   font-size: 30px;
 }
 
-.table_last_packs {
-  border-collapse: collapse;
-}
 
-.table_last_packs th,
-.table_last_packs td {
-  padding: 8px;
-  text-align: center;
-  vertical-align: middle;
-  font-weight: normal;
-  max-width: 100vw;
-  padding-left: 15px;
-  padding-right: 15px;
-}
-
-.table_last_packs th {
-  background-color: #ffb41f;
-  color: #000000;
-  position: static;
-  font-family: Arial, sans-serif;
-  font-size: 60px;
-}
-
-.table_last_packs tr {
-  font-family: Arial, sans-serif;
-  font-size: 40px;
-  padding-left: 15px;
-  padding-right: 15px;
-}
-
-.table_last_packs tr:nth-child(odd) {
-  background-color: #ffffff;
-  color: #000000;
-}
-
-.table_last_packs tr:nth-child(even) {
-  background-color: #cccccc;
-  color: #000000;
-}
 
 select {
   padding: 10px;
@@ -319,26 +294,4 @@ select:focus {
   margin: 20px;
   background-color: #555555;
   border: 2px solid #ffffff;
-}
-
-a {
-  font-size: 45px;
-  color: #000000;
-  font-family: Arial, sans-serif;
-  padding: 20px;
-  border: 2px solid #000000;
-  border-radius: 25px;
-  background-color: #ffb41f;
-  cursor: pointer;
-  word-wrap: break-word;
-  width: 300px;
-  text-decoration: none;
-  text-align: center;
-  display: block;
-  margin: 20px auto;
-}
-
-a:hover {
-  background-color: #000000;
-  color: #ffb41f;
 }

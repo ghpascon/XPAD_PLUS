@@ -9,7 +9,6 @@ public:
     {
         telnetServer.begin();
         telnetServer.setNoDelay(true);
-        Serial.println("Telnet server iniciado na porta 23");
     }
 
     // Aceita novo cliente se necessário
@@ -26,7 +25,6 @@ public:
                 }
                 telnetClient = newClient;
                 telnetClient.setNoDelay(true);
-                Serial.println("Cliente Telnet conectado");
             }
         }
     }
@@ -36,8 +34,6 @@ public:
         maintain_client();
         if (!telnetClient || !telnetClient.connected())
             return false;
-
-        Serial.println("Telnet Write: " + msg);
 
         if (newline)
             return telnetClient.println(msg) > 0;

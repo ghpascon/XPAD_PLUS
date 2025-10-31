@@ -21,11 +21,7 @@ public:
 		{
 			tag_commands.clear_tags();
 		}
-		else
-		{
-			last_packs.save();
 		}
-	}
 
 	void check_timeout()
 	{

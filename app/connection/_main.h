@@ -1,3 +1,4 @@
+#include "pins.h"
 #include "vars.h"
 #include "eth_callback.h"
 #include "telnet.h"

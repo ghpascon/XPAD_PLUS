@@ -11,7 +11,7 @@ public:
 
 	void state()
 	{
-		byte led_brigthness = 0x70;
+		byte led_brigthness = 0x50;
 		if (!setup_done)
 			leds[0] = CRGB(led_brigthness, 0x00, 0x00);
 		else if (!read_on)

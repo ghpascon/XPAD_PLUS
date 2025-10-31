@@ -10,7 +10,7 @@
 #include <HTTPClient.h>
 String ssid = "";
 uint64_t chipid;
-bool eth_connected = false;
+extern bool eth_connected;
 String eth_ip = "";
 #include <ESPmDNS.h>
 

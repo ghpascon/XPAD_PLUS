@@ -103,7 +103,6 @@ public:
 
 		if (millis() - current_clear_time >= clear_time)
 		{
-			last_packs.save();
 			tag_commands.clear_tags();
 			current_clear_time = millis();
 		}

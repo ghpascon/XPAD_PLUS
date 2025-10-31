@@ -27,17 +27,15 @@ extern byte temperatura;
 extern byte session;
 extern byte max_session;
 
+extern CONFIG_FILE config_file_commands;
+
 extern bool start_reading;
 extern bool gpi_start;
 extern int gpi_stop_delay;
-extern bool ignore_read;
 extern bool always_send;
 
 extern const int gpo_qtd;
 extern bool gpo[];
-
-extern const int max_packs;
-extern String last_packs_read[];
 
 extern String tags_table;
 extern bool simple_send;
