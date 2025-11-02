@@ -114,7 +114,23 @@ private:
 		{
 			decode_gtin = parameter.endsWith("on");
 		}
-	}
+		else if (parameter.startsWith("dhcp_on:"))
+		{
+			dhcp_on = parameter.endsWith("on");
+		}
+		else if (parameter.startsWith("static_ip:"))
+		{
+			static_ip = parameter.substring(parameter.indexOf(":") + 1);
+		}
+		else if (parameter.startsWith("gateway_ip:"))
+		{
+			gateway_ip = parameter.substring(parameter.indexOf(":") + 1);
+		}
+		else if (parameter.startsWith("subnet_mask:"))
+		{
+			subnet_mask = parameter.substring(parameter.indexOf(":") + 1);
+		}
+		}
 
 public:
 	// Salva toda a configuração no arquivo
@@ -154,6 +170,10 @@ public:
 		new_config += "keyboard:" + String(keyboard ? "on" : "off") + "\n";
 		new_config += "buzzer_on:" + String(buzzer_on ? "on" : "off") + "\n";
 		new_config += "decode_gtin:" + String(decode_gtin ? "on" : "off") + "\n";
+		new_config += "dhcp_on:" + String(dhcp_on ? "on" : "off") + "\n";
+		new_config += "static_ip:" + static_ip + "\n";
+		new_config += "gateway_ip:" + gateway_ip + "\n";
+		new_config += "subnet_mask:" + subnet_mask + "\n";
 
 		// Na primeira chamada, apenas inicializa a referência e não salva
 		if (first_time)

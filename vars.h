@@ -65,3 +65,9 @@ bool btConnected = false;
 bool eth_connected = false;
 // Mutex para proteger acesso ao array `tags`
 SemaphoreHandle_t tags_mutex = nullptr;
+
+// ==================== Ethernet Configuration ====================
+bool dhcp_on = false;
+String static_ip = "192.168.1.101";
+String gateway_ip = "192.168.1.1";
+String subnet_mask = "255.255.255.0";

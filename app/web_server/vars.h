@@ -44,3 +44,8 @@ extern bool hotspot_on;
 extern bool keyboard;
 extern bool buzzer_on;
 extern bool decode_gtin;
+
+extern bool dhcp_on;
+extern String static_ip;
+extern String gateway_ip;
+extern String subnet_mask;

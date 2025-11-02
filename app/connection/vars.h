@@ -18,3 +18,8 @@ String eth_ip = "";
 
 #include <AsyncTCP.h>
 #include <Update.h>
+
+extern bool dhcp_on;
+extern String static_ip;
+extern String gateway_ip;
+extern String subnet_mask;

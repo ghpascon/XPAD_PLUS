@@ -6,6 +6,7 @@
 #include "script_reader.h"
 #include "script_reader_modes.h"
 #include "script_gpo_test.h"
+#include "script_eth_config.h"
 
 class WEB_SERVER
 {
@@ -59,6 +60,9 @@ public:
 
         server.on("/gpo_test", HTTP_GET, [](AsyncWebServerRequest *request)
                   { request->send(LittleFS, "/html/gpo_test.html", "text/html"); });
+
+        server.on("/eth_config", HTTP_GET, [](AsyncWebServerRequest *request)
+                  { request->send(LittleFS, "/html/eth_config.html", "text/html"); });
     }
     void script_web_server()
     {
@@ -69,5 +73,6 @@ public:
         config_reader_script();
         reader_modes_script();
         gpo_test_script();
+        eth_config_script();
     }
 };
