@@ -295,3 +295,18 @@ select:focus {
   background-color: #555555;
   border: 2px solid #ffffff;
 }
+
+/* === ETH page overrides (scoped) === */
+body.eth .SMTX {
+  position: relative;
+  top: 20px;
+}
+
+body.eth .placeholder_style {
+  font-size: 40px;
+  width: 420px;
+}
+
+body.eth ::placeholder {
+  font-size: 40px;
+}

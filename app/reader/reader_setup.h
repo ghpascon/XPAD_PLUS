@@ -106,8 +106,6 @@ public:
 	}
 	byte get_active_ant()
 	{
-		if (one_ant)
-			return 0x01;
 		byte ants = 0;
 		for (int i = 0; i < ant_qtd; i++)
 		{
@@ -119,33 +117,18 @@ public:
 
 	void set_ant_power()
 	{
-		if (one_ant)
-		{
-			byte reader_ant_power[] = {
-				0x05,
-				0xff,
-				0x2f,
-				antena[0].power};
-			crcValue = uiCrc16Cal(reader_ant_power, sizeof(reader_ant_power));
-			crc1 = crcValue & 0xFF;
-			crc2 = (crcValue >> 8) & 0xFF;
-			write_bytes(reader_ant_power, sizeof(reader_ant_power), crc1, crc2);
-		}
-		else
-		{
-			byte reader_ant_power[] = {
-				0x08,
-				0xff,
-				0x2f,
-				antena[0].power,
-				antena[1].power,
-				antena[2].power,
-				antena[3].power};
-			crcValue = uiCrc16Cal(reader_ant_power, sizeof(reader_ant_power));
-			crc1 = crcValue & 0xFF;
-			crc2 = (crcValue >> 8) & 0xFF;
-			write_bytes(reader_ant_power, sizeof(reader_ant_power), crc1, crc2);
-		}
+		byte reader_ant_power[] = {
+			0x08,
+			0xff,
+			0x2f,
+			antena[0].power,
+			antena[1].power,
+			antena[2].power,
+			antena[3].power};
+		crcValue = uiCrc16Cal(reader_ant_power, sizeof(reader_ant_power));
+		crc1 = crcValue & 0xFF;
+		crc2 = (crcValue >> 8) & 0xFF;
+		write_bytes(reader_ant_power, sizeof(reader_ant_power), crc1, crc2);
 	}
 
 	void set_ant_check()

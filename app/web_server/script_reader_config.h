@@ -1,26 +1,26 @@
 void config_reader_script()
 {
-    server.on("/save_reader_parameters", HTTP_POST, [](AsyncWebServerRequest *request)
+    server.on("/save_reader_parameters", HTTP_POST, []()
               {
-        if (request->hasParam("simple_send", true)) {
-            simple_send = (request->getParam("simple_send", true)->value()).toInt() == 1;
+        if (server.hasArg("simple_send")) {
+            simple_send = (server.arg("simple_send")).toInt() == 1;
         }
 
-        if (request->hasParam("select_session", true)) {
-            session = (request->getParam("select_session", true)->value()).toInt();
+        if (server.hasArg("select_session")) {
+            session = (server.arg("select_session")).toInt();
             if (session > max_session)
                 session = 0x00;
         }
 
-        if (request->hasParam("gpi_stop_delay", true))
+        if (server.hasArg("gpi_stop_delay"))
         {
-            gpi_stop_delay = (request->getParam("gpi_stop_delay", true)->value()).toInt();
+            gpi_stop_delay = (server.arg("gpi_stop_delay")).toInt();
         }
 
         reader_module.setup_reader();
-        request->send(200, "text/plain", "Dados salvos com sucesso"); });
+        server.send(200, "text/plain", "Dados salvos com sucesso"); });
 
-    server.on("/get_reader_config", HTTP_GET, [](AsyncWebServerRequest *request)
+    server.on("/get_reader_config", HTTP_GET, []()
               {
             const int row = 3;
             const int col = 2;
@@ -35,9 +35,9 @@ void config_reader_script()
             }
             json += "}";
             json.replace(",}", "}");
-        request->send(200, "application/json", json); });
+        server.send(200, "application/json", json); });
 
-    server.on("/table_reader_att", HTTP_GET, [](AsyncWebServerRequest *request)
+    server.on("/table_reader_att", HTTP_GET, []()
               {
         int row = 3;
         int col = 2;
@@ -58,5 +58,5 @@ void config_reader_script()
         }
         json += "]";
 
-    request->send(200, "application/json", json); });
+    server.send(200, "application/json", json); });
 }

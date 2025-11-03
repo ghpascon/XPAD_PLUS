@@ -1,7 +1,5 @@
 const String config_file = "/config.txt";
 
-extern const bool one_ant;
-
 extern const int ant_qtd;
 extern ANTENA_COMMANDS antena_commands;
 extern ANTENA antena[];
@@ -28,3 +26,7 @@ extern bool dhcp_on;
 extern String static_ip;
 extern String gateway_ip;
 extern String subnet_mask;
+
+extern bool webhook_on;
+extern String webhook_url;
+extern String device_name;

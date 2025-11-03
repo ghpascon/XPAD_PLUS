@@ -2,8 +2,6 @@
 #include <freertos/semphr.h>
 
 // ==================== Antena ====================
-const bool one_ant = true;
-
 const int ant_qtd = 4;
 ANTENA antena[ant_qtd];
 ANTENA_COMMANDS antena_commands;
@@ -33,6 +31,7 @@ READER reader_module;
 
 // ==================== Servidor Web ====================
 WEB_SERVER web_server;
+WEBHOOK webhook;
 
 // ==================== Configurações ====================
 CONFIG_FILE config_file_commands;
@@ -71,3 +70,8 @@ bool dhcp_on = false;
 String static_ip = "192.168.1.101";
 String gateway_ip = "192.168.1.1";
 String subnet_mask = "255.255.255.0";
+
+// WEBHOOK
+bool webhook_on = false;
+String webhook_url = "http://192.168.1.10:5001";
+String device_name = "xpad_plus";

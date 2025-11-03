@@ -1,9 +1,13 @@
 void eth_config_script()
 {
-    server.on("/eth_config", HTTP_GET, [](AsyncWebServerRequest *request)
-              { request->send(LittleFS, "/html/eth_config.html", "text/html"); });
+    server.on("/eth_config", HTTP_GET, []()
+              {
+                  File f = LittleFS.open("/html/eth_config.html", "r");
+                  if (!f) { server.send(404, "text/plain", "Not found"); return; }
+                  server.streamFile(f, "text/html");
+                  f.close(); });
 
-    server.on("/get_eth_config", HTTP_GET, [](AsyncWebServerRequest *request)
+    server.on("/get_eth_config", HTTP_GET, []()
               {
         String json = "{";
         json += "\"dhcp_on\":" + String(dhcp_on ? "true" : "false") + ",";
@@ -11,31 +15,32 @@ void eth_config_script()
         json += "\"gateway_ip\":\"" + gateway_ip + "\",";
         json += "\"subnet_mask\":\"" + subnet_mask + "\"";
         json += "}";
-        request->send(200, "application/json", json); });
+        server.send(200, "application/json", json); });
 
-    server.on("/save_eth_config", HTTP_POST, [](AsyncWebServerRequest *request)
+    server.on("/save_eth_config", HTTP_POST, []()
               {
-        if (request->hasParam("dhcp_on", true)) {
-            dhcp_on = request->getParam("dhcp_on", true)->value() == "1";
+        if (server.hasArg("dhcp_on")) {
+            dhcp_on = server.arg("dhcp_on") == "1";
         }
         
         if (!dhcp_on) {
-            if (request->hasParam("static_ip", true)) {
-                static_ip = request->getParam("static_ip", true)->value();
+            if (server.hasArg("static_ip")) {
+                static_ip = server.arg("static_ip");
             }
-            if (request->hasParam("gateway_ip", true)) {
-                gateway_ip = request->getParam("gateway_ip", true)->value();
+            if (server.hasArg("gateway_ip")) {
+                gateway_ip = server.arg("gateway_ip");
             }
-            if (request->hasParam("subnet_mask", true)) {
-                subnet_mask = request->getParam("subnet_mask", true)->value();
+            if (server.hasArg("subnet_mask")) {
+                subnet_mask = server.arg("subnet_mask");
             }
         }
         
         config_file_commands.save_config();
         connection.setup(); // Reinicia a conexão com as novas configurações
-        request->redirect("/eth_config"); });
+        server.sendHeader("Location", "/eth_config");
+        server.send(303); });
 
-    server.on("/table_eth_att", HTTP_GET, [](AsyncWebServerRequest *request)
+    server.on("/table_eth_att", HTTP_GET, []()
               {
         String json = "[[\"DHCP\",\"" + String(dhcp_on ? "ON" : "OFF") + "\"],";
         json += "[\"STATIC IP\",\"" + static_ip + "\"],";
@@ -50,5 +55,5 @@ void eth_config_script()
             json += "[\"CURRENT IP\",\"-\"]";
         }
         json += "]";
-        request->send(200, "application/json", json); });
+        server.send(200, "application/json", json); });
 }

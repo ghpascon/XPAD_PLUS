@@ -1,6 +1,6 @@
 void gpo_test_script()
 {
-  server.on("/gpo_att", HTTP_GET, [](AsyncWebServerRequest *request)
+  server.on("/gpo_att", HTTP_GET, []()
             {
     const int row = 6;
     const int col = 2;
@@ -19,20 +19,20 @@ void gpo_test_script()
     json += "}";
     json.replace(",}", "}");
 
-    request->send(200, "application/json", json); });
+    server.send(200, "application/json", json); });
 
-  server.on("/gpo_1_bt", HTTP_GET, [](AsyncWebServerRequest *request)
+  server.on("/gpo_1_bt", HTTP_GET, []()
             { 
         gpo[0]=!gpo[0];
-        request->send(200, "application/json", String(gpo[0])); });
+    server.send(200, "application/json", String(gpo[0])); });
 
-  server.on("/gpo_2_bt", HTTP_GET, [](AsyncWebServerRequest *request)
+  server.on("/gpo_2_bt", HTTP_GET, []()
             { 
         gpo[1]=!gpo[1];
-        request->send(200, "application/json", String(gpo[1])); });
+    server.send(200, "application/json", String(gpo[1])); });
 
-  server.on("/gpo_3_bt", HTTP_GET, [](AsyncWebServerRequest *request)
+  server.on("/gpo_3_bt", HTTP_GET, []()
             { 
         gpo[2]=!gpo[2];
-        request->send(200, "application/json", String(gpo[2])); });
+    server.send(200, "application/json", String(gpo[2])); });
 }

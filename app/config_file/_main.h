@@ -4,6 +4,9 @@
 class CONFIG_FILE
 {
 private:
+	// Buffer reutilizado para montar a string de configuração (reduz fragmentação)
+	String new_config;
+
 	// Escreve uma linha no arquivo de configuração
 	void writeFile(String to_write)
 	{
@@ -51,9 +54,6 @@ private:
 
 			current_power = constrain(current_power, min_power, max_power);
 			current_rssi = max(current_rssi, min_rssi);
-
-			if (one_ant)
-				current_active = "on";
 
 			antena_commands.set_antena(
 				current_ant,
@@ -130,7 +130,20 @@ private:
 		{
 			subnet_mask = parameter.substring(parameter.indexOf(":") + 1);
 		}
+		// ==================== Webhook ====================
+		else if (parameter.startsWith("webhook_on:"))
+		{
+			webhook_on = parameter.endsWith("on");
 		}
+		else if (parameter.startsWith("webhook_url:"))
+		{
+			webhook_url = parameter.substring(parameter.indexOf(":") + 1);
+		}
+		else if (parameter.startsWith("device_name:"))
+		{
+			device_name = parameter.substring(parameter.indexOf(":") + 1);
+		}
+	}
 
 public:
 	// Salva toda a configuração no arquivo
@@ -140,14 +153,26 @@ public:
 		static unsigned long last_save_time = 0;
 		static String old_config = "";
 		static bool first_time = true;
+		static bool reserved_capacity = false; // reserva apenas uma vez
 
 		if ((millis() - last_save_time) < save_time)
 			return;
 
 		last_save_time = millis();
 
+		// Na primeira chamada, reservar uma capacidade aproximada para reduzir realocações
+		if (!reserved_capacity)
+		{
+			// Estimativa: ~32 chars por antena + ~512 chars para demais parâmetros
+			size_t approx = (size_t)ant_qtd * 32u + 512u;
+			new_config.reserve(approx);
+			reserved_capacity = true;
+		}
+
+		// Limpa o conteúdo mantendo a capacidade reservada
+		new_config = "";
+
 		// Monta a configuração atual em uma única string
-		String new_config = "";
 
 		// Antenas
 		for (int i = 0; i < ant_qtd; i++)
@@ -174,6 +199,10 @@ public:
 		new_config += "static_ip:" + static_ip + "\n";
 		new_config += "gateway_ip:" + gateway_ip + "\n";
 		new_config += "subnet_mask:" + subnet_mask + "\n";
+		// Webhook
+		new_config += "webhook_on:" + String(webhook_on ? "on" : "off") + "\n";
+		new_config += "webhook_url:" + webhook_url + "\n";
+		new_config += "device_name:" + device_name + "\n";
 
 		// Na primeira chamada, apenas inicializa a referência e não salva
 		if (first_time)

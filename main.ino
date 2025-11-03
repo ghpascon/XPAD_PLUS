@@ -4,6 +4,8 @@
 #include "libs.h"
 #include "vars.h"
 #include <freertos/semphr.h>
+#include <HTTPClient.h>
+#include <WiFiClientSecure.h>
 
 // ==================== Setup ====================
 void setup()
@@ -31,6 +33,7 @@ void setup()
     connection.setup();
     myserial.setup();
     web_server.setup();
+    webhook.setup();
     tag_commands.clear_tags();
 
     // Pre-reserve String buffers for tags to reduce heap churn/fragmentation
@@ -71,4 +74,9 @@ void loop()
 
     // Save configuration
     config_file_commands.save_config();
+
+    // Handle web server requests (synchronous server)
+    web_server.loop();
+    // Webhook tick
+    webhook.loop();
 }

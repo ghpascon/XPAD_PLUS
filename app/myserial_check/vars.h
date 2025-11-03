@@ -1,7 +1,5 @@
 extern READER reader_module;
 
-extern const bool one_ant;
-
 extern bool read_on;
 
 extern TAG_COMMANDS tag_commands;

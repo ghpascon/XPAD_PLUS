@@ -1,6 +1,6 @@
 void reader_script()
 {
-  server.on("/reader_html_info", HTTP_GET, [](AsyncWebServerRequest *request)
+  server.on("/reader_html_info", HTTP_GET, []()
             {
     const int row = 5;
     const int col = 2;
@@ -18,9 +18,9 @@ void reader_script()
     json += "}";
     json.replace(",}", "}");
 
-    request->send(200, "application/json", json); });
+    server.send(200, "application/json", json); });
 
-  server.on("/tags_table_att", HTTP_GET, [](AsyncWebServerRequest *request)
+  server.on("/tags_table_att", HTTP_GET, []()
             {
       // Snapshot com cap para evitar cópias gigantes que causem OOM
       const int SNAPSHOT_LIMIT = 30;
@@ -28,14 +28,14 @@ void reader_script()
 
       if (tags_mutex == nullptr)
       {
-        request->send(500, "application/json", "[]");
+        server.send(500, "application/json", "[]");
         return;
       }
 
       if (xSemaphoreTake(tags_mutex, (TickType_t)50) != pdTRUE)
       {
         // busy
-        request->send(503, "application/json", "[]");
+        server.send(503, "application/json", "[]");
         return;
       }
 
@@ -72,5 +72,5 @@ void reader_script()
       }
       json += "]";
       json.replace(",]", "]");
-      request->send(200, "application/json", json); });
+  server.send(200, "application/json", json); });
 }

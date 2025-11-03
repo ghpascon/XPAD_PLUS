@@ -16,7 +16,6 @@ String eth_ip = "";
 
 #include <ArduinoJson.h>
 
-#include <AsyncTCP.h>
 #include <Update.h>
 
 extern bool dhcp_on;

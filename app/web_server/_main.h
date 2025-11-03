@@ -1,12 +1,12 @@
 #include "vars.h"
 #include "script_all.h"
 #include "script_ant_config.h"
-#include "script_one_ant_config.h"
 #include "script_reader_config.h"
 #include "script_reader.h"
 #include "script_reader_modes.h"
 #include "script_gpo_test.h"
 #include "script_eth_config.h"
+#include "script_webhook_config.h"
 
 class WEB_SERVER
 {
@@ -34,45 +34,94 @@ public:
 
     void style_web_server()
     {
-        server.on("/style.css", HTTP_GET, [](AsyncWebServerRequest *request)
-                  { request->send(LittleFS, "/html/style.css", "text/css"); });
+        server.on("/style.css", HTTP_GET, []()
+                  {
+                      File f = LittleFS.open("/html/style.css", "r");
+                      if (!f)
+                      {
+                          server.send(404, "text/plain", "Not found");
+                          return;
+                      }
+                      server.streamFile(f, "text/css");
+                      f.close(); });
 
-        server.on("/FONT_SMARTX.woff", HTTP_GET, [](AsyncWebServerRequest *request)
-                  { request->send(LittleFS, "/html/FONT_SMARTX.woff", "font/woff"); });
+        server.on("/FONT_SMARTX.woff", HTTP_GET, []()
+                  {
+                      File f = LittleFS.open("/html/FONT_SMARTX.woff", "r");
+                      if (!f)
+                      {
+                          server.send(404, "text/plain", "Not found");
+                          return;
+                      }
+                      server.streamFile(f, "font/woff");
+                      f.close(); });
     }
 
     void routes_web_server()
     {
-        server.on("/", HTTP_GET, [](AsyncWebServerRequest *request)
-                  { request->send(LittleFS, "/html/home.html", "text/html"); });
+        server.on("/", HTTP_GET, []()
+                  {
+                      File f = LittleFS.open("/html/home.html", "r");
+                      if (!f) { server.send(404, "text/plain", "Not found"); return; }
+                      server.streamFile(f, "text/html");
+                      f.close(); });
 
-        server.on("/reader", HTTP_GET, [](AsyncWebServerRequest *request)
-                  { request->send(LittleFS, "/html/reader.html", "text/html"); });
+        server.on("/reader", HTTP_GET, []()
+                  {
+                      File f = LittleFS.open("/html/reader.html", "r");
+                      if (!f) { server.send(404, "text/plain", "Not found"); return; }
+                      server.streamFile(f, "text/html");
+                      f.close(); });
 
-        server.on("/ant_config", HTTP_GET, [](AsyncWebServerRequest *request)
-                  { request->send(LittleFS, one_ant ? "/html/one_ant_config.html" : "/html/ant_config.html", "text/html"); });
+        server.on("/ant_config", HTTP_GET, []()
+                  {
+                      File f = LittleFS.open("/html/ant_config.html", "r");
+                      if (!f) { server.send(404, "text/plain", "Not found"); return; }
+                      server.streamFile(f, "text/html");
+                      f.close(); });
 
-        server.on("/reader_config", HTTP_GET, [](AsyncWebServerRequest *request)
-                  { request->send(LittleFS, "/html/reader_config.html", "text/html"); });
+        server.on("/reader_config", HTTP_GET, []()
+                  {
+                      File f = LittleFS.open("/html/reader_config.html", "r");
+                      if (!f) { server.send(404, "text/plain", "Not found"); return; }
+                      server.streamFile(f, "text/html");
+                      f.close(); });
 
-        server.on("/reader_modes", HTTP_GET, [](AsyncWebServerRequest *request)
-                  { request->send(LittleFS, "/html/reader_modes.html", "text/html"); });
+        server.on("/reader_modes", HTTP_GET, []()
+                  {
+                      File f = LittleFS.open("/html/reader_modes.html", "r");
+                      if (!f) { server.send(404, "text/plain", "Not found"); return; }
+                      server.streamFile(f, "text/html");
+                      f.close(); });
 
-        server.on("/gpo_test", HTTP_GET, [](AsyncWebServerRequest *request)
-                  { request->send(LittleFS, "/html/gpo_test.html", "text/html"); });
+        server.on("/gpo_test", HTTP_GET, []()
+                  {
+                      File f = LittleFS.open("/html/gpo_test.html", "r");
+                      if (!f) { server.send(404, "text/plain", "Not found"); return; }
+                      server.streamFile(f, "text/html");
+                      f.close(); });
 
-        server.on("/eth_config", HTTP_GET, [](AsyncWebServerRequest *request)
-                  { request->send(LittleFS, "/html/eth_config.html", "text/html"); });
+        server.on("/eth_config", HTTP_GET, []()
+                  {
+                      File f = LittleFS.open("/html/eth_config.html", "r");
+                      if (!f) { server.send(404, "text/plain", "Not found"); return; }
+                      server.streamFile(f, "text/html");
+                      f.close(); });
     }
     void script_web_server()
     {
         all_script();
         reader_script();
         config_ant_script();
-        config_one_ant_script();
         config_reader_script();
         reader_modes_script();
         gpo_test_script();
         eth_config_script();
+        webhook_config_script();
+    }
+
+    void loop()
+    {
+        server.handleClient();
     }
 };

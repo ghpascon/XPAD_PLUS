@@ -12,7 +12,7 @@ public:
 
         my_keyboard.begin();
         USB.VID(0x0001);
-        USB.PID(one_ant ? 0x0001 : 0x0004);
+        USB.PID(0x0001);
         USB.manufacturerName("Smartx");
         USB.productName("XPAD_PLUS");
         USB.usbAttributes(0x80);

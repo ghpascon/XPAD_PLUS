@@ -16,3 +16,6 @@ dhcp_on:off
 static_ip:192.168.1.101
 gateway_ip:192.168.1.1
 subnet_mask:255.255.255.0
+webhook_on:off
+webhook_url:http://192.168.1.10:5001
+device_name:xpad_plus

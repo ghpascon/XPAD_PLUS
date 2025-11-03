@@ -5,8 +5,6 @@
 unsigned int crcValue;
 byte crc1, crc2;
 
-extern const bool one_ant;
-
 byte step = 0;
 bool setup_done = false;
 

@@ -6,7 +6,6 @@ USBCDC my_usb;
 extern bool keyboard;
 extern bool simple_send;
 
-extern const bool one_ant;
 extern CONNECTION connection;
 extern bool eth_connected;
 extern bool btConnected;

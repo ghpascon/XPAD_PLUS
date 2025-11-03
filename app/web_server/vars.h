@@ -1,10 +1,7 @@
-#include <ESPAsyncWebServer.h>
-AsyncWebServer server(80);
+#include <WebServer.h>
+WebServer server(80);
 
-#include <AsyncTCP.h>
 #include <Update.h>
-
-extern const bool one_ant;
 
 extern READER reader_module;
 
@@ -37,7 +34,6 @@ extern bool always_send;
 extern const int gpo_qtd;
 extern bool gpo[];
 
-extern String tags_table;
 extern bool simple_send;
 
 extern bool hotspot_on;
@@ -49,3 +45,8 @@ extern bool dhcp_on;
 extern String static_ip;
 extern String gateway_ip;
 extern String subnet_mask;
+
+// Webhook
+extern bool webhook_on;
+extern String webhook_url;
+extern String device_name;

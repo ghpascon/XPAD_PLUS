@@ -1,59 +1,59 @@
 void config_ant_script()
 {
-    server.on("/save_parameters", HTTP_POST, [](AsyncWebServerRequest *request)
+    server.on("/save_parameters", HTTP_POST, []()
               {
         antena[0].active = 0;
         antena[1].active = 0;
         antena[2].active = 0;
         antena[3].active = 0;
 
-        if (request->hasParam("ANT_1_POWER", true))
+        if (server.hasArg("ANT_1_POWER"))
         {
-            antena[0].power = (request->getParam("ANT_1_POWER", true)->value()).toInt();
+            antena[0].power = (server.arg("ANT_1_POWER")).toInt();
         }
-        if (request->hasParam("ANT_2_POWER", true))
+        if (server.hasArg("ANT_2_POWER"))
         {
-            antena[1].power = (request->getParam("ANT_2_POWER", true)->value()).toInt();
+            antena[1].power = (server.arg("ANT_2_POWER")).toInt();
         }
-        if (request->hasParam("ANT_3_POWER", true))
+        if (server.hasArg("ANT_3_POWER"))
         {
-            antena[2].power = (request->getParam("ANT_3_POWER", true)->value()).toInt();
+            antena[2].power = (server.arg("ANT_3_POWER")).toInt();
         }
-        if (request->hasParam("ANT_4_POWER", true))
+        if (server.hasArg("ANT_4_POWER"))
         {
-            antena[3].power = (request->getParam("ANT_4_POWER", true)->value()).toInt();
-        }
-
-        if (request->hasParam("ANT_1_RSSI", true))
-        {
-            antena[0].rssi = (request->getParam("ANT_1_RSSI", true)->value()).toInt();
-        }
-        if (request->hasParam("ANT_2_RSSI", true))
-        {
-            antena[1].rssi = (request->getParam("ANT_2_RSSI", true)->value()).toInt();
-        }
-        if (request->hasParam("ANT_3_RSSI", true))
-        {
-            antena[2].rssi = (request->getParam("ANT_3_RSSI", true)->value()).toInt();
-        }
-        if (request->hasParam("ANT_4_RSSI", true))
-        {
-            antena[3].rssi = (request->getParam("ANT_4_RSSI", true)->value()).toInt();
+            antena[3].power = (server.arg("ANT_4_POWER")).toInt();
         }
 
-        if (request->hasParam("ANT_1_CHECK", true))
+        if (server.hasArg("ANT_1_RSSI"))
+        {
+            antena[0].rssi = (server.arg("ANT_1_RSSI")).toInt();
+        }
+        if (server.hasArg("ANT_2_RSSI"))
+        {
+            antena[1].rssi = (server.arg("ANT_2_RSSI")).toInt();
+        }
+        if (server.hasArg("ANT_3_RSSI"))
+        {
+            antena[2].rssi = (server.arg("ANT_3_RSSI")).toInt();
+        }
+        if (server.hasArg("ANT_4_RSSI"))
+        {
+            antena[3].rssi = (server.arg("ANT_4_RSSI")).toInt();
+        }
+
+        if (server.hasArg("ANT_1_CHECK"))
         {
             antena[0].active = 1;
         }
-        if (request->hasParam("ANT_2_CHECK", true))
+        if (server.hasArg("ANT_2_CHECK"))
         {
             antena[1].active = 1;
         }
-        if (request->hasParam("ANT_3_CHECK", true))
+        if (server.hasArg("ANT_3_CHECK"))
         {
             antena[2].active = 1;
         }
-        if (request->hasParam("ANT_4_CHECK", true))
+        if (server.hasArg("ANT_4_CHECK"))
         {
             antena[3].active = 1;
         }
@@ -66,9 +66,9 @@ void config_ant_script()
 
         reader_module.setup_reader();
 
-        request->send(200, "text/plain", "Dados recebidos com sucesso"); });
+        server.send(200, "text/plain", "Dados recebidos com sucesso"); });
 
-    server.on("/get_config", HTTP_GET, [](AsyncWebServerRequest *request)
+    server.on("/get_config", HTTP_GET, []()
               {
         // Example configuration data
         String json = "{";
@@ -82,9 +82,9 @@ void config_ant_script()
 
         json.replace(",}", "}");
 
-        request->send(200, "application/json", json); });
+        server.send(200, "application/json", json); });
 
-    server.on("/table_att", HTTP_GET, [](AsyncWebServerRequest *request)
+    server.on("/table_att", HTTP_GET, []()
               {
         int row = 4;
         int col = 4;
@@ -105,5 +105,5 @@ void config_ant_script()
         json += "]";
         }
         json += "]";
-        request->send(200, "application/json", json); });
+    server.send(200, "application/json", json); });
 }

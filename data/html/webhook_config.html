@@ -1,38 +1,26 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>XPAD_PLUS ANT CONFIG</title>
+    <title>XPAD_PLUS WEBHOOK CONFIG</title>
     <link rel="stylesheet" type="text/css" href="/style.css" />
   </head>
-
-  <body>
+  <body class="eth">
     <div class="container0">
       <div class="container1">
         <div class="container2">
-          <label style="position: relative; top: 20px" class="SMTX"
-            >XPAD_PLUS</label
-          >
+          <label class="SMTX">XPAD_PLUS</label>
         </div>
         <div class="container2">
           <button onclick="window.location.href='/'">HOME</button>
         </div>
       </div>
 
-      <div class="container1">
-        <h1>ANT CONFIG</h1>
-      </div>
-
       <div
-        style="
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          margin-top: -70px;
-        "
+        style="display: flex; flex-direction: column; align-items: center"
         class="container1"
       >
         <form
-          action="/save_parameters_one_ant"
+          action="/save_webhook_config"
           method="POST"
           target="hidden_iframe"
         >
@@ -40,45 +28,50 @@
             <table id="config_table">
               <thead>
                 <tr>
-                  <th><label class="SMTX">&#172;</label></th>
-                  <th><h1>POWER</h1></th>
-                  <th><h1>RSSI</h1></th>
+                  <th><h1>PARAMETER</h1></th>
+                  <th><h1>VALUE</h1></th>
                 </tr>
               </thead>
-
               <tbody>
                 <tr>
+                  <td><label>WEBHOOK:</label></td>
                   <td>
-                    <label>1:</label>
+                    <select id="webhook_on" name="webhook_on">
+                      <option value="0">OFF</option>
+                      <option value="1">ON</option>
+                    </select>
                   </td>
+                </tr>
+                <tr>
+                  <td><label>URL:</label></td>
                   <td>
                     <input
                       class="placeholder_style"
                       type="text"
-                      name="ANT_1_POWER"
+                      name="webhook_url"
+                      id="webhook_url"
                     />
                   </td>
+                </tr>
+                <tr>
+                  <td><label>DEVICE NAME:</label></td>
                   <td>
                     <input
                       class="placeholder_style"
                       type="text"
-                      name="ANT_1_RSSI"
+                      name="device_name"
+                      id="device_name"
                     />
                   </td>
                 </tr>
               </tbody>
             </table>
           </div>
-
           <div class="container1">
             <input class="bt_style" type="submit" value="SET CONFIG" />
           </div>
         </form>
         <iframe name="hidden_iframe" style="display: none"></iframe>
-      </div>
-
-      <div class="container1">
-        <button onclick="window.location.href='/reader'">READER</button>
       </div>
 
       <div class="container1">
@@ -89,9 +82,8 @@
         <table class="table_2" id="dataTable">
           <thead>
             <tr>
-              <th>ANT</th>
-              <th>POWER</th>
-              <th>RSSI</th>
+              <th>PARAMETER</th>
+              <th>VALUE</th>
             </tr>
           </thead>
           <tbody></tbody>
@@ -99,33 +91,22 @@
       </div>
     </div>
   </body>
-
   <script>
     window.onload = function () {
-      fetch("/get_config_one_ant")
-        .then((response) => response.json())
+      fetch("/get_webhook_config")
+        .then((r) => r.json())
         .then((data) => {
-          for (let key in data) {
-            let element = document.querySelector(`[name="${key}"]`);
-            if (element) {
-              if (element.type === "checkbox") {
-                element.checked = data[key];
-              } else {
-                element.value = data[key];
-              }
-            }
-          }
+          document.getElementById("webhook_on").value = data.webhook_on
+            ? "1"
+            : "0";
+          document.getElementById("webhook_url").value = data.webhook_url;
+          document.getElementById("device_name").value = data.device_name;
         })
-        .catch((error) => console.error("Error fetching data:", error));
+        .catch((e) => console.error("Error fetching webhook config:", e));
     };
 
-    function update_html() {
-      att_table();
-    }
-    setInterval(update_html, 1000);
-
-    function att_table() {
-      fetch("/table_att_one_ant")
+    function update_elements() {
+      fetch("/table_webhook_att")
         .then((response) => response.json())
         .then((data) => {
           const tbody = document
@@ -144,5 +125,6 @@
         })
         .catch((error) => console.error("Error fetching data:", error));
     }
+    setInterval(update_elements, 1000);
   </script>
 </html>

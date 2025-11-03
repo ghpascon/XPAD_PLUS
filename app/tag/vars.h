@@ -11,7 +11,6 @@ extern PINS pins;
 extern bool read_on;
 extern bool always_send;
 
-String tags_table = "";
 extern MySerial myserial;
 extern bool simple_send;
 extern bool buzzer_on;
