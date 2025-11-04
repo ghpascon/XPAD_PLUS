@@ -14,5 +14,4 @@ const int gpo_pin[gpo_qtd] = {out_1_pin, out_2_pin, out_3_pin};
 bool gpo[gpo_qtd] = {false, false, false};
 
 extern MySerial myserial;
-
-#define buzzer_pin 10
+extern bool buzzer_on;

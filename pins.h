@@ -16,3 +16,5 @@
 
 #define tx_reader_module 13
 #define rx_reader_module 14
+#define buzzer_pin 4
+#define indicator_pin 42

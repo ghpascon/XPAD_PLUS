@@ -19,6 +19,8 @@ public:
 	void set_buzzer()
 	{
 		const int buzzer_time_on = 100;
-		digitalWrite(buzzer_pin, (millis() - buzzer_time > buzzer_time_on) ? HIGH : LOW);
+		const int indicator_time_on = 1000;
+		(millis() - buzzer_time > buzzer_time_on && buzzer_on) ? pinMode(buzzer_pin, OUTPUT) : pinMode(buzzer_pin, INPUT_PULLUP);
+		(millis() - buzzer_time < indicator_time_on && buzzer_on) ? pinMode(indicator_pin, OUTPUT) : pinMode(indicator_pin, INPUT_PULLUP);
 	}
 };
