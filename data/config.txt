@@ -12,7 +12,7 @@ hotspot_on:on
 keyboard:off
 buzzer_on:off
 decode_gtin:off
-dhcp_on:off
+dhcp_on:on
 static_ip:192.168.1.101
 gateway_ip:192.168.1.1
 subnet_mask:255.255.255.0

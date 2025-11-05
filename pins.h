@@ -10,11 +10,12 @@
 #define in_2_pin 6
 #define in_3_pin 7
 
-#define out_1_pin 15
-#define out_2_pin 16
-#define out_3_pin 17
+#define out_1_pin 41
+#define out_2_pin 40
+#define out_3_pin 39
 
 #define tx_reader_module 13
 #define rx_reader_module 14
+
 #define buzzer_pin 4
 #define indicator_pin 42
