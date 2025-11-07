@@ -15,7 +15,7 @@ public:
 		pinMode(gpo_pin[1], OUTPUT);
 		pinMode(gpo_pin[2], OUTPUT);
 
-		pinMode(buzzer_pin, INPUT_PULLUP);
+		pinMode(buzzer_pin, OUTPUT);
 		pinMode(indicator_pin, INPUT_PULLUP);
 	}
 };
