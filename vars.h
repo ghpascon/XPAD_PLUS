@@ -75,3 +75,6 @@ String subnet_mask = "255.255.255.0";
 bool webhook_on = false;
 String webhook_url = "http://192.168.1.10:5001";
 String device_name = "xpad_plus";
+
+// ======= prefix =======
+String prefix = "";

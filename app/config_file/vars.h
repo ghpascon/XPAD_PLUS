@@ -30,3 +30,5 @@ extern String subnet_mask;
 extern bool webhook_on;
 extern String webhook_url;
 extern String device_name;
+
+extern String prefix;

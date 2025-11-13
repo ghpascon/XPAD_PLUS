@@ -143,6 +143,10 @@ private:
 		{
 			device_name = parameter.substring(parameter.indexOf(":") + 1);
 		}
+		else if (parameter.startsWith("prefix:"))
+		{
+			prefix = parameter.substring(parameter.indexOf(":") + 1);
+		}
 	}
 
 public:
@@ -203,6 +207,7 @@ public:
 		new_config += "webhook_on:" + String(webhook_on ? "on" : "off") + "\n";
 		new_config += "webhook_url:" + webhook_url + "\n";
 		new_config += "device_name:" + device_name + "\n";
+		new_config += "prefix:" + prefix + "\n";
 
 		// Na primeira chamada, apenas inicializa a referência e não salva
 		if (first_time)

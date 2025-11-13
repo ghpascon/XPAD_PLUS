@@ -193,6 +193,21 @@ public:
             myserial.write("#IP:" + ETH.localIP().toString());
         }
 
+        // ================= Prefix config =================
+        else if (cmd.startsWith("#prefix:"))
+        {
+            String v = cmd.substring(String("#prefix:").length());
+            v.trim();
+            // Permite prefix vazio (length >= 0)
+            prefix = v;
+            config_file_commands.save_config();
+            myserial.write("#PREFIX:" + prefix);
+        }
+        else if (cmd == "#get_prefix")
+        {
+            myserial.write("#PREFIX:" + prefix);
+        }
+
         else
         {
             myserial.write("#INVALID_CMD");

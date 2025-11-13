@@ -7,6 +7,7 @@
 #include "script_gpo_test.h"
 #include "script_eth_config.h"
 #include "script_webhook_config.h"
+#include "script_prefix.h"
 
 class WEB_SERVER
 {
@@ -107,6 +108,14 @@ public:
                       if (!f) { server.send(404, "text/plain", "Not found"); return; }
                       server.streamFile(f, "text/html");
                       f.close(); });
+
+        // prefix
+        server.on("/prefix", HTTP_GET, []()
+                  {
+                      File f = LittleFS.open("/html/prefix.html", "r");
+                      if (!f) { server.send(404, "text/plain", "Not found"); return; }
+                      server.streamFile(f, "text/html");
+                      f.close(); });
     }
     void script_web_server()
     {
@@ -118,6 +127,7 @@ public:
         gpo_test_script();
         eth_config_script();
         webhook_config_script();
+        prefix_script();
     }
 
     void loop()

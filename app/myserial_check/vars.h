@@ -30,3 +30,6 @@ extern MySerial myserial;
 extern bool keyboard;
 extern bool buzzer_on;
 extern bool decode_gtin;
+
+// Prefix config (extern only)
+extern String prefix;

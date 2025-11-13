@@ -17,3 +17,5 @@ extern bool buzzer_on;
 extern bool decode_gtin;
 // Mutex para proteger acesso concorrente a `tags[]`
 extern SemaphoreHandle_t tags_mutex;
+
+extern String prefix;

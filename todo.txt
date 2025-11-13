@@ -1,0 +1,4 @@
+- rf link 
+- protected mode
+- improve comand receive logs
+- no restart

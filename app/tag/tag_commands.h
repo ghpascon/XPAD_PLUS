@@ -6,13 +6,58 @@ class TAG_COMMANDS
 public:
 	void add_tag(String current_epc, String current_tid, int current_ant, int current_rssi)
 	{
-
 		// quick checks that don't need tags[] lock
 		if (!read_on)
 			return;
 
 		if (antena[current_ant - 1].rssi < current_rssi)
 			return;
+
+		// prefix implementation
+		if (prefix.length() > 0)
+		{
+			bool prefix_match = false;
+
+			// Se não tem vírgula, testa prefixo único
+			if (prefix.indexOf(',') == -1)
+			{
+				String trimmed_prefix = prefix;
+				trimmed_prefix.trim();
+				trimmed_prefix.toLowerCase();
+				if (trimmed_prefix.length() > 0 && current_epc.startsWith(trimmed_prefix))
+				{
+					prefix_match = true;
+				}
+			}
+			else
+			{
+				// Divide os prefixes por vírgula e verifica cada um
+				int start = 0;
+				int separator_pos = prefix.indexOf(',');
+
+				while (start < prefix.length())
+				{
+					String current_prefix = (separator_pos != -1) ? prefix.substring(start, separator_pos) : prefix.substring(start);
+
+					current_prefix.trim(); // Remove espaços
+					current_prefix.toLowerCase();
+					if (current_prefix.length() > 0 && current_epc.startsWith(current_prefix))
+					{
+						prefix_match = true;
+						break;
+					}
+
+					if (separator_pos == -1)
+						break;
+
+					start = separator_pos + 1;
+					separator_pos = prefix.indexOf(',', start);
+				}
+			}
+
+			if (!prefix_match)
+				return;
+		}
 
 		if (always_send)
 			display_current_tag(String(current_epc), String(current_tid), String(current_ant), String(current_rssi));
