@@ -68,11 +68,17 @@ public:
 		else if (step == 9)
 			set_ant_pulse();
 		else if (step == 10)
-			set_retry_write(0x05);
+			set_retry_write(0x00);
 		else if (step == 11)
 			query_parameters();
 		else if (step == 12)
 			set_write_power(write_power);
+		else if (step == 13)
+			set_rf_link();
+		else if (step == 14)
+			set_rf_link_gen2x();
+		else if (step == 15)
+			set_tag_focus();
 		else
 		{
 			myserial.write("#SETUP_DONE");

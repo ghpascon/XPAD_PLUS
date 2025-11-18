@@ -212,4 +212,49 @@ public:
 		crc2 = (crcValue >> 8) & 0xFF;
 		write_bytes(reader_time, sizeof(reader_time), crc1, crc2);
 	}
+
+	void set_rf_link()
+	{
+		byte rf_link[] = {
+			0x07,
+			0xff,
+			0x7f,
+			0x01,
+			0x00,
+			0x05};
+		crcValue = uiCrc16Cal(rf_link, sizeof(rf_link));
+		crc1 = crcValue & 0xFF;
+		crc2 = (crcValue >> 8) & 0xFF;
+		write_bytes(rf_link, sizeof(rf_link), crc1, crc2);
+	}
+
+	void set_rf_link_gen2x()
+	{
+		byte rf_link_gen2x[] = {
+			0x07,
+			0xff,
+			0x7f,
+			0x01,
+			0x14,
+			0x15};
+		crcValue = uiCrc16Cal(rf_link_gen2x, sizeof(rf_link_gen2x));
+		crc1 = crcValue & 0xFF;
+		crc2 = (crcValue >> 8) & 0xFF;
+		write_bytes(rf_link_gen2x, sizeof(rf_link_gen2x), crc1, crc2);
+	}
+
+	void set_tag_focus()
+	{
+		byte tag_focus[] = {
+			0x07,
+			0xff,
+			0xea,
+			0x00,
+			0x08,
+			0x00};
+		crcValue = uiCrc16Cal(tag_focus, sizeof(tag_focus));
+		crc1 = crcValue & 0xFF;
+		crc2 = (crcValue >> 8) & 0xFF;
+		write_bytes(tag_focus, sizeof(tag_focus), crc1, crc2);
+	}
 };

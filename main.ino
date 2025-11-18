@@ -65,9 +65,9 @@ void loop()
     pins.check_inputs();
 
     // Process reader and LED modules
+    rgb.state();
     reader_module.functions();
     myserialcheck.loop();
-    rgb.state();
 
     // Update outputs
     pins.set_outputs();
