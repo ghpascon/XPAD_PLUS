@@ -61,20 +61,24 @@ Os comandos podem ser enviados individualmente ou em lote, utilizando o separado
 | Comando | Descrição | Formato |
 |---------|-----------|---------|
 | `#change_password:[EPC];[NEW_PWD];[OLD_PWD]` | Altera senha de tag específica | `#change_password:000102030405060708090A0B;ABCD1234;00000000` |
-| `#protected_mode:[EPC];[PASSWORD];[ENABLE]` | Ativa/desativa modo protegido | `#protected_mode:000102030405060708090A0B;12345678;on` |
+| `#protected_mode:[EPC];[PASSWORD];[ENABLE]` | Ativa/desativa modo protegido para tag específica | `#protected_mode:000102030405060708090A0B;12345678;on` |
+| `#protected_inventory:[ENABLE];[PASSWORD]` | Ativa/desativa inventário protegido global | `#protected_inventory:on;12345678` |
 
 **Parâmetros avançados:**
 
 - **EPC**: 24 caracteres hexadecimais (12 bytes) - EPC da tag alvo
 - **NEW_PWD**: 8 caracteres hexadecimais (4 bytes) - Nova senha
 - **OLD_PWD**: 8 caracteres hexadecimais (4 bytes) - Senha atual (padrão: 00000000)
+- **PASSWORD**: 8 caracteres hexadecimais (4 bytes) - Senha de acesso (padrão: 00000000)
 - **ENABLE**: `on`/`off` ou `true`/`false` - Habilita/desabilita proteção
 
 **Respostas específicas:**
 
 - `#CHANGE_PASSWORD:OK` - Senha alterada com sucesso
-- `#PROTECTED_MODE:ENABLED` - Modo protegido ativado
-- `#PROTECTED_MODE:DISABLED` - Modo protegido desativado
+- `#PROTECTED_MODE:ENABLED` - Modo protegido ativado para tag específica
+- `#PROTECTED_MODE:DISABLED` - Modo protegido desativado para tag específica
+- `#PROTECTED_INVENTORY:ENABLED` - Inventário protegido ativado globalmente
+- `#PROTECTED_INVENTORY:DISABLED` - Inventário protegido desativado globalmente
 - `#ERROR:[DESCRIÇÃO]` - Erro na execução (EPC inválido, senha incorreta, etc.)
 
 ---
@@ -117,6 +121,7 @@ Os comandos podem ser enviados individualmente ou em lote, utilizando o separado
 |---------|-----------|---------|
 | `#prefix:[VALOR]` | Define prefixo para tags | `#prefix:TAG_` |
 | `#get_prefix` | Obtém prefixo atual | `#PREFIX:[valor]` |
+| `#get_protected_inventory` | Obtém status do inventário protegido | `#PROTECTED_INVENTORY:[status]`, `#PROTECTED_INVENTORY_PASSWORD:[senha]` |
 
 ---
 
@@ -185,8 +190,11 @@ Permite configurar múltiplas opções simultaneamente usando o separador `|`.
 | `#READING/#IDLE` | Estado atual de leitura |
 | `#BUZZER:ON/OFF` | Estado do buzzer |
 | `#CHANGE_PASSWORD:OK` | Senha alterada com sucesso |
-| `#PROTECTED_MODE:ENABLED` | Modo protegido ativado |
-| `#PROTECTED_MODE:DISABLED` | Modo protegido desativado |
+| `#PROTECTED_MODE:ENABLED` | Modo protegido ativado para tag específica |
+| `#PROTECTED_MODE:DISABLED` | Modo protegido desativado para tag específica |
+| `#PROTECTED_INVENTORY:ENABLED` | Inventário protegido ativado globalmente |
+| `#PROTECTED_INVENTORY:DISABLED` | Inventário protegido desativado globalmente |
+| `#PROTECTED_INVENTORY_PASSWORD:[senha]` | Senha atual do inventário protegido |
 | `#INVALID_CMD` | Comando não reconhecido |
 | `#ERROR:[DESCRIÇÃO]` | Erro na execução (parâmetros inválidos, etc.) |
 | `#SET_CMD:OK/NOK` | Resultado da configuração |

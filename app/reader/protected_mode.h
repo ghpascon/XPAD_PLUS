@@ -47,4 +47,42 @@ public:
         crc2 = (crcValue >> 8) & 0xFF;
         write_bytes(reader_protected_mode_command, sizeof(reader_protected_mode_command), crc1, crc2, false);
     }
+
+    void protected_inventory(bool enable, String password = "00000000")
+    {
+        // Validate password is 8 hex digits, if false use fallback "00000000"
+        if (!validateHex(password, 8))
+        {
+            password = "00000000";
+        }
+
+        // Convert password hex string to bytes (4 bytes from 8 hex chars)
+        byte password_bytes[4];
+        for (int i = 0; i < 4; i++)
+        {
+            String byteStr = password.substring(i * 2, i * 2 + 2);
+            password_bytes[i] = (byte)strtoul(byteStr.c_str(), NULL, 16);
+        }
+
+        // Build command array: 0c 00 ea 00 0e [enable ? 00 : 01] [password] 08 e8 de
+        byte protected_inventory_command[] = {
+            0x0c,
+            0xff,
+            0xea,
+            0x00,
+            0x0e,
+            enable ? 0x01 : 0x00, // Enable/disable flag (inverted logic)
+            password_bytes[0],
+            password_bytes[1],
+            password_bytes[2],
+            password_bytes[3],
+            enable ? 0x09 : 0x08,
+        };
+
+        // Calculate CRC and send command
+        crcValue = uiCrc16Cal(protected_inventory_command, sizeof(protected_inventory_command));
+        crc1 = crcValue & 0xFF;
+        crc2 = (crcValue >> 8) & 0xFF;
+        write_bytes(protected_inventory_command, sizeof(protected_inventory_command), crc1, crc2, false);
+    }
 };

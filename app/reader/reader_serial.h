@@ -67,11 +67,11 @@ private:
 			{
 				if (cmd.substring(6, 8) == "00")
 				{
-					myserial.write("#LOCK_OK");
+					myserial.write("#LOCK:OK");
 				}
 				else
 				{
-					myserial.write("#LOCK_NOK");
+					myserial.write("#LOCK:ERROR");
 				}
 			}
 
@@ -80,11 +80,11 @@ private:
 			{
 				if (cmd.substring(6, 8) == "00")
 				{
-					myserial.write("#TAG_WRITE_SUCESSO");
+					myserial.write("#TAG_WRITE:OK");
 				}
 				else
 				{
-					myserial.write("#TAG_WRITE_ERRO");
+					myserial.write("#TAG_WRITE:ERROR");
 				}
 				tag_commands.clear_tags();
 			}
@@ -94,15 +94,16 @@ private:
 			{
 				if (cmd.substring(6, 8) == "00")
 				{
-					myserial.write("#TAG_PROTECTED_SUCESSO");
+					myserial.write("#TAG_PROTECTED:OK");
 				}
 				else
 				{
-					myserial.write("#TAG_PROTECTED_ERRO");
+					myserial.write("#TAG_PROTECTED:ERROR");
 				}
 			}
 
-			step++;
+			if (!setup_done)
+				step++;
 		}
 		else
 		{

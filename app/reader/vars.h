@@ -30,3 +30,7 @@ extern bool read_on;
 
 extern MySerial myserial;
 extern int current_tag;
+
+// ==================== Protected Inventory ====================
+extern bool protected_inventory_enabled;
+extern String protected_inventory_password;

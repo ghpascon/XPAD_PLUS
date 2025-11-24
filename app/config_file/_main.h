@@ -208,6 +208,9 @@ public:
 		new_config += "webhook_url:" + webhook_url + "\n";
 		new_config += "device_name:" + device_name + "\n";
 		new_config += "prefix:" + prefix + "\n";
+		// Protected Inventory
+		new_config += "protected_inventory_enabled:" + String(protected_inventory_enabled ? "on" : "off") + "\n";
+		new_config += "protected_inventory_password:" + protected_inventory_password + "\n";
 
 		// Na primeira chamada, apenas inicializa a referência e não salva
 		if (first_time)

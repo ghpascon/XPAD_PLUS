@@ -174,6 +174,61 @@ private:
         reader_module.protected_mode_tag(epc, password, enable);
     }
 
+    void protected_inventory_cmd(String cmd)
+    {
+        if (!cmd.startsWith("#protected_inventory:"))
+        {
+            myserial.write("#ERROR:Invalid command prefix");
+            return;
+        }
+
+        String payload = cmd.substring(21); // remove "#protected_inventory:"
+
+        // Split by ';' into max 2 parts: ENABLE;PASSWORD
+        String parts[2];
+        int count = 0;
+        int start = 0;
+        for (int i = 0; i < payload.length() && count < 2; i++)
+        {
+            if (payload.charAt(i) == ';')
+            {
+                parts[count++] = payload.substring(start, i);
+                start = i + 1;
+            }
+        }
+        parts[count++] = payload.substring(start); // last part
+
+        // Validate number of parts (1 or 2)
+        if (count < 1 || count > 2)
+        {
+            myserial.write("#ERROR:Invalid parameters count");
+            return;
+        }
+
+        String enable_str = parts[0];
+        enable_str.toLowerCase();
+        String password = (count == 2) ? parts[1] : "00000000";
+
+        // Validate enable parameter
+        if (enable_str != "on" && enable_str != "off" && enable_str != "true" && enable_str != "false")
+        {
+            myserial.write("#ERROR:Invalid enable parameter");
+            return;
+        }
+
+        // Password will be validated inside protected_inventory function
+        bool enable = (enable_str == "on" || enable_str == "true");
+
+        // Save configuration
+        protected_inventory_enabled = enable;
+        protected_inventory_password = password;
+
+        // enable + password
+        myserial.write(String(enable) + " " + password);
+
+        reader_module.setup_reader();
+    }
+
 public:
     void check_commands(String cmd)
     {
@@ -336,6 +391,17 @@ public:
         else if (cmd.startsWith("#protected_mode:"))
         {
             protected_mode_cmd(cmd);
+        }
+
+        else if (cmd.startsWith("#protected_inventory:"))
+        {
+            protected_inventory_cmd(cmd);
+        }
+
+        else if (cmd == "#get_protected_inventory")
+        {
+            myserial.write("#PROTECTED_INVENTORY:" + String(protected_inventory_enabled ? "ENABLED" : "DISABLED"));
+            myserial.write("#PROTECTED_INVENTORY_PASSWORD:" + protected_inventory_password);
         }
 
         else

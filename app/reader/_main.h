@@ -69,7 +69,7 @@ public:
 		else if (step == 9)
 			set_ant_pulse();
 		else if (step == 10)
-			set_retry_write(0x00);
+			set_retry_write(0x03);
 		else if (step == 11)
 			query_parameters();
 		else if (step == 12)
@@ -80,6 +80,8 @@ public:
 			set_rf_link_gen2x();
 		else if (step == 15)
 			set_tag_focus();
+		else if (step == 16)
+			protected_inventory(protected_inventory_enabled, protected_inventory_password);
 		else
 		{
 			myserial.write("#SETUP_DONE");

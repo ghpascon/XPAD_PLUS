@@ -8,6 +8,7 @@
 #include "script_eth_config.h"
 #include "script_webhook_config.h"
 #include "script_prefix.h"
+#include "script_protected_inventory.h"
 
 class WEB_SERVER
 {
@@ -116,6 +117,14 @@ public:
                       if (!f) { server.send(404, "text/plain", "Not found"); return; }
                       server.streamFile(f, "text/html");
                       f.close(); });
+
+        // protected_inventory
+        server.on("/protected_inventory", HTTP_GET, []()
+                  {
+                      File f = LittleFS.open("/html/protected_inventory.html", "r");
+                      if (!f) { server.send(404, "text/plain", "Not found"); return; }
+                      server.streamFile(f, "text/html");
+                      f.close(); });
     }
     void script_web_server()
     {
@@ -128,6 +137,7 @@ public:
         eth_config_script();
         webhook_config_script();
         prefix_script();
+        protected_inventory_script();
     }
 
     void loop()

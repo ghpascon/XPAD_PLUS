@@ -77,3 +77,7 @@ String device_name = "xpad_plus";
 
 // ======= prefix =======
 String prefix = "";
+
+// ==================== Protected Inventory ====================
+bool protected_inventory_enabled = false;
+String protected_inventory_password = "00000000";
