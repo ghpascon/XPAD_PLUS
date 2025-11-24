@@ -56,6 +56,27 @@ Os comandos podem ser enviados individualmente ou em lote, utilizando o separado
 - **TYPE**: `epc` ou `tid`
 - **TARGET**: 24 caracteres hexadecimais para filtro
 
+### Gerenciamento Avançado de Tags
+
+| Comando | Descrição | Formato |
+|---------|-----------|---------|
+| `#change_password:[EPC];[NEW_PWD];[OLD_PWD]` | Altera senha de tag específica | `#change_password:000102030405060708090A0B;ABCD1234;00000000` |
+| `#protected_mode:[EPC];[PASSWORD];[ENABLE]` | Ativa/desativa modo protegido | `#protected_mode:000102030405060708090A0B;12345678;on` |
+
+**Parâmetros avançados:**
+
+- **EPC**: 24 caracteres hexadecimais (12 bytes) - EPC da tag alvo
+- **NEW_PWD**: 8 caracteres hexadecimais (4 bytes) - Nova senha
+- **OLD_PWD**: 8 caracteres hexadecimais (4 bytes) - Senha atual (padrão: 00000000)
+- **ENABLE**: `on`/`off` ou `true`/`false` - Habilita/desabilita proteção
+
+**Respostas específicas:**
+
+- `#CHANGE_PASSWORD:OK` - Senha alterada com sucesso
+- `#PROTECTED_MODE:ENABLED` - Modo protegido ativado
+- `#PROTECTED_MODE:DISABLED` - Modo protegido desativado
+- `#ERROR:[DESCRIÇÃO]` - Erro na execução (EPC inválido, senha incorreta, etc.)
+
 ---
 
 ## Configuração de Potência e Sessão
@@ -154,3 +175,36 @@ Permite configurar múltiplas opções simultaneamente usando o separador `|`.
 - Outros comandos são processados individualmente
 
 ---
+
+## Códigos de Resposta
+
+| Resposta | Significado |
+|----------|-------------|
+| `#PONG` | Resposta ao ping |
+| `#READ:ON/OFF` | Estado de leitura alterado |
+| `#READING/#IDLE` | Estado atual de leitura |
+| `#BUZZER:ON/OFF` | Estado do buzzer |
+| `#CHANGE_PASSWORD:OK` | Senha alterada com sucesso |
+| `#PROTECTED_MODE:ENABLED` | Modo protegido ativado |
+| `#PROTECTED_MODE:DISABLED` | Modo protegido desativado |
+| `#INVALID_CMD` | Comando não reconhecido |
+| `#ERROR:[DESCRIÇÃO]` | Erro na execução (parâmetros inválidos, etc.) |
+| `#SET_CMD:OK/NOK` | Resultado da configuração |
+
+---
+
+## Notas Importantes
+
+1. **Comandos são case-sensitive** - mantenha a capitalização exata
+2. **Valores hexadecimais** devem usar caracteres 0-9, A-F (maiúsculos ou minúsculos)
+3. **Separadores** para múltiplos comandos: `|` (pipe)
+4. **Separadores** para parâmetros: `;` (ponto e vírgula) ou `:` (dois pontos)
+5. **Configurações** são aplicadas imediatamente e podem reconfigurar o reader
+6. **Reinicialização** pode ser necessária após certas configurações
+7. **Funcionalidades avançadas** como alteração de senhas e modo protegido requerem validação rigorosa dos parâmetros
+
+---
+
+## Suporte Técnico
+
+Para dúvidas técnicas ou implementação específica, consulte a documentação técnica completa ou entre em contato com o suporte.

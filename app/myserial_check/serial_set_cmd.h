@@ -55,11 +55,6 @@ private:
             cmd.replace("read_power:", "");
             antena_commands.set_power_all(cmd.toInt());
         }
-        else if (cmd.startsWith("write_power:"))
-        {
-            cmd.replace("write_power:", "");
-            write_power = constrain(cmd.toInt(), min_power, max_power);
-        }
         else if (cmd.startsWith("buzzer:"))
         {
             buzzer_on = cmd.endsWith("on");

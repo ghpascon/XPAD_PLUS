@@ -21,7 +21,6 @@ extern byte max_session;
 
 extern READER reader_module;
 
-extern byte write_power;
 extern bool simple_send;
 
 extern ANTENA antena[];

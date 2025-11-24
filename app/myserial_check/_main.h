@@ -50,6 +50,131 @@ public:
         myserial.write("#READ:" + String(read_on ? "ON" : "OFF"));
     }
 
+private:
+    void change_password_cmd(String cmd)
+    {
+        if (!cmd.startsWith("#change_password:"))
+        {
+            myserial.write("#ERROR:Invalid command prefix");
+            return;
+        }
+
+        String payload = cmd.substring(17); // remove "#change_password:"
+
+        // Split by ';' into max 3 parts: EPC;NEW_PASSWORD;OLD_PASSWORD
+        String parts[3];
+        int count = 0;
+        int start = 0;
+        for (int i = 0; i < payload.length() && count < 3; i++)
+        {
+            if (payload.charAt(i) == ';')
+            {
+                parts[count++] = payload.substring(start, i);
+                start = i + 1;
+            }
+        }
+        parts[count++] = payload.substring(start); // last part
+
+        // Validate number of parts (2 or 3)
+        if (count < 2 || count > 3)
+        {
+            myserial.write("#ERROR:Invalid parameters count");
+            return;
+        }
+
+        String epc = parts[0];
+        String new_password = parts[1];
+        String old_password = (count == 3) ? parts[2] : "00000000";
+
+        // Validate EPC (24 hex chars)
+        if (epc.length() != 24 || !validateHex(epc, 24))
+        {
+            myserial.write("#ERROR:Invalid EPC");
+            return;
+        }
+
+        // Validate new password (8 hex chars)
+        if (new_password.length() != 8 || !validateHex(new_password, 8))
+        {
+            myserial.write("#ERROR:Invalid new password");
+            return;
+        }
+
+        // Validate old password (8 hex chars)
+        if (old_password.length() != 8 || !validateHex(old_password, 8))
+        {
+            myserial.write("#ERROR:Invalid old password");
+            return;
+        }
+
+        reader_module.change_password(epc, new_password, old_password);
+    }
+
+    void protected_mode_cmd(String cmd)
+    {
+        if (!cmd.startsWith("#protected_mode:"))
+        {
+            myserial.write("#ERROR:Invalid command prefix");
+            return;
+        }
+
+        String payload = cmd.substring(16); // remove "#protected_mode:"
+
+        // Split by ';' into 3 parts: EPC;PASSWORD;ENABLE
+        String parts[3];
+        int count = 0;
+        int start = 0;
+        for (int i = 0; i < payload.length() && count < 3; i++)
+        {
+            if (payload.charAt(i) == ';')
+            {
+                parts[count++] = payload.substring(start, i);
+                start = i + 1;
+            }
+        }
+        parts[count++] = payload.substring(start); // last part
+
+        // Validate number of parts (must be 3)
+        if (count != 3)
+        {
+            myserial.write("#ERROR:Missing parameters");
+            return;
+        }
+
+        String epc = parts[0];
+        String password = parts[1];
+        String enable_str = parts[2];
+        enable_str.toLowerCase();
+
+        // Validate EPC (24 hex chars)
+        if (epc.length() != 24 || !validateHex(epc, 24))
+        {
+            myserial.write("#ERROR:Invalid EPC");
+            return;
+        }
+
+        // Validate password (8 hex chars)
+        if (password.length() != 8 || !validateHex(password, 8))
+        {
+            myserial.write("#ERROR:Invalid password");
+            return;
+        }
+
+        // Validate enable parameter
+        if (enable_str != "on" && enable_str != "off" && enable_str != "true" && enable_str != "false")
+        {
+            myserial.write("#ERROR:Invalid enable parameter");
+            return;
+        }
+
+        bool enable = (enable_str == "on" || enable_str == "true");
+        // mudar a senha antes (usando senha padrão como old_password)
+        reader_module.change_password(epc, password);
+
+        reader_module.protected_mode_tag(epc, password, enable);
+    }
+
+public:
     void check_commands(String cmd)
     {
         if (cmd == "#ping" || cmd == "ping")
@@ -85,9 +210,9 @@ public:
             write_tag_cmd(cmd);
         }
 
-        else if (cmd.startsWith("#password"))
+        else if (cmd.startsWith("#change_password:"))
         {
-            reader_module.change_password(cmd);
+            change_password_cmd(cmd);
         }
 
         else if (cmd.startsWith("#set_cmd:"))
@@ -206,6 +331,11 @@ public:
         else if (cmd == "#get_prefix")
         {
             myserial.write("#PREFIX:" + prefix);
+        }
+
+        else if (cmd.startsWith("#protected_mode:"))
+        {
+            protected_mode_cmd(cmd);
         }
 
         else

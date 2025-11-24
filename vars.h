@@ -8,7 +8,6 @@ ANTENA_COMMANDS antena_commands;
 const byte min_power = 10;
 const byte max_power = 33;
 const byte min_rssi = 40;
-byte write_power = 28;
 
 // ==================== Tags ====================
 const int max_tags = 300;

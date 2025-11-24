@@ -15,8 +15,7 @@ extern byte temperatura;
 extern byte session;
 
 // evita erro no recebimento serial
-const int timeout_serial_rec = 100;
-unsigned long current_timeout_serial_rec = 0;
+
 bool answer_rec = true;
 
 // config
@@ -28,7 +27,6 @@ extern const int max_tags;
 extern TAG tags[];
 
 extern bool read_on;
-extern byte write_power;
 
 extern MySerial myserial;
 extern int current_tag;

@@ -81,26 +81,9 @@ public:
         {
             reader_module.write_tag_no_filter(epc_bytes, pwd_bytes);
         }
-
-        tag_commands.clear_tags();
     }
 
 private:
-    bool validateHex(String s, int expectedLength)
-    {
-        if (s.length() != expectedLength)
-            return false;
-        for (unsigned int i = 0; i < s.length(); i++)
-        {
-            char c = s.charAt(i);
-            if (!((c >= '0' && c <= '9') ||
-                  (c >= 'a' && c <= 'f') ||
-                  (c >= 'A' && c <= 'F')))
-                return false;
-        }
-        return true;
-    }
-
     void hexToBytes(String hex, byte *buffer, int bufferLen)
     {
         for (int i = 0; i < bufferLen; i++)

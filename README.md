@@ -17,6 +17,7 @@ Totalmente **plug-and-play**, o XPAD PLUS oferece múltiplas formas de conexão 
 ✅ **Interface web completa** para configuração sem necessidade de software externo  
 ✅ **Integração nativa** com sistemas externos via HTTP/HTTPS  
 ✅ **I/O programáveis** (3 entradas + 3 saídas) para automação industrial  
+✅ **Escrita e proteção avançada** de tags RFID com alteração de senhas  
 ✅ **Pronto para usar** - não requer programação ou desenvolvimento  
 
 ---
@@ -91,6 +92,28 @@ Além das formas de comunicação, o XPAD PLUS possui um servidor web completo a
 | **Reader Status** | Monitoramento de tags lidas em tempo real |
 
 **Acesso**: Basta digitar o IP do dispositivo no navegador - sem instalação de software!
+
+### 🔒 **Funcionalidades Avançadas de Tags RFID**
+
+#### **Escrita e Programação**
+
+- **Escrita de EPC** com e sem filtros de seleção
+- **Suporte a filtros** EPC e TID para escrita seletiva
+- **Validação automática** de dados hexadecimais
+- **Configuração de potência** específica para escrita
+
+#### **Gerenciamento de Segurança**
+
+- **Alteração de senhas**: Modificação segura das senhas de acesso das tags
+- **Modo protegido**: Ativação/desativação de proteção contra escrita não autorizada
+- **Autenticação por senha**: Controle de acesso baseado em senha da tag
+- **Validação de integridade**: Verificação automática de parâmetros antes da escrita
+
+**Casos de uso de segurança:**
+- Proteção de tags críticas contra alteração acidental
+- Controle de acesso a dados sensíveis
+- Rastreabilidade com garantia de integridade
+- Personalização segura de identificadores
 
 ### 🔌 **I/O Industrial**
 
@@ -271,6 +294,8 @@ Além das formas de comunicação, o XPAD PLUS possui um servidor web completo a
 | **Interface web embarcada** | ✅ Completa, sem instalação | ❌ Requer software proprietário |
 | **Emulador de teclado** | ✅ Plug-and-play total | ❌ Não disponível |
 | **Webhook nativo** | ✅ HTTP/HTTPS integrado | ⚠️ Apenas via gateway externo |
+| **Escrita avançada de tags** | ✅ EPC, TID, filtros, senhas | ⚠️ Funcionalidade limitada |
+| **Modo protegido** | ✅ Proteção contra escrita | ❌ Não disponível |
 | **Configuração simples** | ✅ Via navegador | ❌ Software desktop obrigatório |
 | **Multi-plataforma** | ✅ Windows, Linux, macOS, Android | ⚠️ Apenas Windows |
 | **Suporte técnico** | ✅ Nacional (Brasil) | ❌ Importado, suporte limitado |

@@ -128,52 +128,66 @@ public:
     }
 
     // Change password command parser
-    void change_password(String cmd)
+    void change_password(String epc, String new_password, String old_password = "00000000")
     {
-        myserial.write("Received: " + cmd);
-        cmd.replace("#password:", "");
-
-        int idx1 = cmd.indexOf('|');
-        int idx2 = cmd.indexOf('|', idx1 + 1);
-
-        if (idx1 == -1 || idx2 == -1)
+        // Validate input parameters
+        if (epc.length() != 24 || new_password.length() != 8 || old_password.length() != 8)
         {
-            myserial.write("Invalid format: Missing separators '|'");
-            return;
+            return; // Invalid parameters
         }
 
-        String param1 = cmd.substring(0, idx1);
-        String param2 = cmd.substring(idx1 + 1, idx2);
-        String param3 = cmd.substring(idx2 + 1);
-
-        if (param1.length() != 24 || param2.length() != 8 || param3.length() != 8)
+        // Validate hex strings
+        if (!validateHex(epc, 24) || !validateHex(new_password, 8) || !validateHex(old_password, 8))
         {
-            myserial.write("Invalid parameter length");
-            return;
+            return; // Invalid hex format
         }
 
-        String allParams[] = {param1, param2, param3};
-        for (int i = 0; i < 3; i++)
+        // Convert EPC hex string to bytes (12 bytes from 24 hex chars)
+        byte epc_bytes[12];
+        for (int i = 0; i < 12; i++)
         {
-            for (char c : allParams[i])
-            {
-                if (!isHexadecimalDigit(c))
-                {
-                    myserial.write("Invalid hex digit in parameter " + String(i + 1));
-                    return;
-                }
-            }
+            String byteStr = epc.substring(i * 2, i * 2 + 2);
+            epc_bytes[i] = (byte)strtoul(byteStr.c_str(), NULL, 16);
         }
 
-        // Convert hex strings to byte arrays
-        byte password_data[3][12]; // 24 hex chars = 12 bytes
-        for (int i = 0; i < 3; i++)
+        // Convert new password hex string to bytes (4 bytes from 8 hex chars)
+        byte new_password_bytes[4];
+        for (int i = 0; i < 4; i++)
         {
-            for (int j = 0; j < 12; j++)
-            {
-                String byteStr = allParams[i].substring(j * 2, j * 2 + 2);
-                password_data[i][j] = (byte)strtol(byteStr.c_str(), nullptr, 16);
-            }
+            String byteStr = new_password.substring(i * 2, i * 2 + 2);
+            new_password_bytes[i] = (byte)strtoul(byteStr.c_str(), NULL, 16);
         }
+
+        // Convert old password hex string to bytes (4 bytes from 8 hex chars)
+        byte old_password_bytes[4];
+        for (int i = 0; i < 4; i++)
+        {
+            String byteStr = old_password.substring(i * 2, i * 2 + 2);
+            old_password_bytes[i] = (byte)strtoul(byteStr.c_str(), NULL, 16);
+        }
+
+        // Build command array: 1c 00 03 02 06 epc 00 02 new_password old_password
+        byte change_password_command[] = {
+            0x1c,
+            0x00,
+            0x03,
+            0x02,
+            0x06,
+            // EPC bytes (12 bytes)
+            epc_bytes[0], epc_bytes[1], epc_bytes[2], epc_bytes[3],
+            epc_bytes[4], epc_bytes[5], epc_bytes[6], epc_bytes[7],
+            epc_bytes[8], epc_bytes[9], epc_bytes[10], epc_bytes[11],
+            0x00,
+            0x02,
+            // New password bytes (4 bytes)
+            new_password_bytes[0], new_password_bytes[1], new_password_bytes[2], new_password_bytes[3],
+            // Old password bytes (4 bytes)
+            old_password_bytes[0], old_password_bytes[1], old_password_bytes[2], old_password_bytes[3]};
+
+        // Calculate CRC and send command
+        crcValue = uiCrc16Cal(change_password_command, sizeof(change_password_command));
+        crc1 = crcValue & 0xFF;
+        crc2 = (crcValue >> 8) & 0xFF;
+        write_bytes(change_password_command, sizeof(change_password_command), crc1, crc2, true);
     }
 };

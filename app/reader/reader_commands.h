@@ -24,7 +24,7 @@ public:
 		return uiCrcValue;
 	}
 
-	void write_bytes(byte values[], byte lenght, byte crc1, byte crc2)
+	void write_bytes(byte values[], byte lenght, byte crc1, byte crc2, bool wait_answer = true)
 	{
 		for (int i = 0; i < lenght; i++)
 		{
@@ -32,8 +32,9 @@ public:
 		}
 		Serial2.write(crc1);
 		Serial2.write(crc2);
-
-		answer_rec = false;
-		current_timeout_serial_rec = millis();
+		if (wait_answer)
+		{
+			answer_rec = false;
+		}
 	}
 };

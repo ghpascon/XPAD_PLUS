@@ -6,8 +6,9 @@
 #include "reader_setup.h"
 #include "reader_verifications.h"
 #include "reader_write_commands.h"
+#include "protected_mode.h"
 
-class READER : public serial_reader, public reader_read_on_commands, public reader_write_commands, public setup_commands_reader, public periodic_commands_reader, public reader_verifications
+class READER : public serial_reader, public reader_read_on_commands, public reader_write_commands, public setup_commands_reader, public periodic_commands_reader, public reader_verifications, public protected_mode
 {
 public:
 	void setup()
@@ -72,7 +73,7 @@ public:
 		else if (step == 11)
 			query_parameters();
 		else if (step == 12)
-			set_write_power(write_power);
+			set_write_power(antena[0].power);
 		else if (step == 13)
 			set_rf_link();
 		else if (step == 14)

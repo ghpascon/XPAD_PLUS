@@ -6,26 +6,53 @@ public:
 		if (!Serial2.available())
 			return;
 
+		const int timeout_serial_rec = 100;
+		unsigned long current_timeout_serial_rec = 0;
 		const int full_cmd_timeout = 3000;
 		unsigned long current_full_cmd_timeout = millis();
-
-		answer_rec = true;
+		int cmd_length = 0;
 		String cmd_rec = "";
 		current_timeout_serial_rec = millis();
-		while (millis() - current_timeout_serial_rec < timeout_serial_rec || millis() - current_full_cmd_timeout > full_cmd_timeout)
+		while (millis() - current_timeout_serial_rec < timeout_serial_rec && millis() - current_full_cmd_timeout < full_cmd_timeout)
 		{
 			if (!Serial2.available())
 				continue;
 			byte cmd = Serial2.read();
+
+			// determine expected command length from first byte
+			if (cmd_rec == "")
+			{
+				cmd_length = 2 * (cmd + 1);
+				answer_rec = true; // Reset answer_rec for each new command
+			}
+
 			cmd_rec += String((cmd < 0x10) ? "0" : "") + String(cmd, HEX);
+
+			// process command when complete
+			if (cmd_rec.length() == cmd_length)
+			{
+				cmd_handler(cmd_rec);
+				cmd_rec = "";
+				cmd_length = 0;
+				// answer_rec will be set to false by write_bytes in cmd_handler
+			}
+
 			current_timeout_serial_rec = millis();
 		}
-		cmd_handler(cmd_rec);
+
+		// Process any remaining incomplete command
+		if (cmd_rec.length() > 0)
+		{
+			cmd_handler(cmd_rec);
+		}
 	}
 
 private:
 	void cmd_handler(String cmd)
 	{
+		if (cmd.length() < 10)
+			return;
+
 		String status = cmd.substring(2, 4);
 		String reader_cmd = cmd.substring(4, 6);
 
@@ -36,7 +63,7 @@ private:
 				myserial.write("#ANT_ERROR: ");
 			}
 
-			if (reader_cmd == "06")
+			else if (reader_cmd == "06")
 			{
 				if (cmd.substring(6, 8) == "00")
 				{
@@ -48,6 +75,7 @@ private:
 				}
 			}
 
+			// WRITE
 			else if (reader_cmd == "03" || reader_cmd == "04")
 			{
 				if (cmd.substring(6, 8) == "00")
@@ -57,6 +85,20 @@ private:
 				else
 				{
 					myserial.write("#TAG_WRITE_ERRO");
+				}
+				tag_commands.clear_tags();
+			}
+
+			// PROTECTED MODE
+			else if (reader_cmd == "e9")
+			{
+				if (cmd.substring(6, 8) == "00")
+				{
+					myserial.write("#TAG_PROTECTED_SUCESSO");
+				}
+				else
+				{
+					myserial.write("#TAG_PROTECTED_ERRO");
 				}
 			}
 
