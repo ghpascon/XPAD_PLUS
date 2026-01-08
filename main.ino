@@ -7,6 +7,31 @@
 #include <HTTPClient.h>
 #include <WiFiClientSecure.h>
 
+// ==================== Core 0 Task (RGB + Pins) ====================
+void core0Task(void *pvParameters)
+{
+    // Configure watchdog for Core 0
+    esp_task_wdt_add(NULL);
+
+    while (true)
+    {
+        // Reset watchdog for Core 0
+        esp_task_wdt_reset();
+
+        // RGB state management
+        rgb.state();
+
+        // Check inputs
+        pins.check_inputs();
+
+        // Update outputs
+        pins.set_outputs();
+
+        // Small delay to prevent task from starving other processes
+        vTaskDelay(pdMS_TO_TICKS(10)); // 10ms delay
+    }
+}
+
 // ==================== Setup ====================
 void setup()
 {
@@ -43,16 +68,26 @@ void setup()
         tags[i].epc.reserve(24);
         tags[i].tid.reserve(24);
     }
-    // criar mutex para proteger accesso a tags[]
-    tags_mutex = xSemaphoreCreateMutex();
     rgb.setup();
     pins.setup();
     reader_module.setup();
+
+    // Create task for Core 0 (RGB + Pins)
+    xTaskCreatePinnedToCore(
+        core0Task,   // Function to implement the task
+        "Core0Task", // Name of the task
+        4096,        // Stack size in words
+        NULL,        // Task input parameter
+        1,           // Priority of the task (1 = low priority)
+        NULL,        // Task handle
+        0            // Core where the task should run (0)
+    );
+
     // Pause for stability
     delay(500);
 }
 
-// ==================== Loop ====================
+// ==================== Loop (Core 1 - Main) ====================
 void loop()
 {
     // Reset the Watchdog
@@ -61,22 +96,16 @@ void loop()
     // Process serial communication
     myserial.loop();
 
-    // Check inputs
-    pins.check_inputs();
-
-    // Process reader and LED modules
-    rgb.state();
+    // Process reader module (Core 1)
     reader_module.functions();
     myserialcheck.loop();
-
-    // Update outputs
-    pins.set_outputs();
 
     // Save configuration
     config_file_commands.save_config();
 
     // Handle web server requests (synchronous server)
     web_server.loop();
+
     // Webhook tick
     webhook.loop();
 }

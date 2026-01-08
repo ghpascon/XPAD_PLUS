@@ -26,19 +26,6 @@ void reader_script()
       const int SNAPSHOT_LIMIT = 30;
       String json = "[]";
 
-      if (tags_mutex == nullptr)
-      {
-        server.send(500, "application/json", "[]");
-        return;
-      }
-
-      if (xSemaphoreTake(tags_mutex, (TickType_t)50) != pdTRUE)
-      {
-        // busy
-        server.send(503, "application/json", "[]");
-        return;
-      }
-
       // Copy up to SNAPSHOT_LIMIT entries into local arrays
       String epc_list[SNAPSHOT_LIMIT];
       String tid_list[SNAPSHOT_LIMIT];
@@ -54,8 +41,6 @@ void reader_script()
         rssi_list[cnt] = tags[i].rssi;
         cnt++;
       }
-
-      xSemaphoreGive(tags_mutex);
 
       // Build JSON from snapshot
       json = "[";

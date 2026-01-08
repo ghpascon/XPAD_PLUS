@@ -62,44 +62,11 @@ public:
 		if (always_send)
 			display_current_tag(String(current_epc), String(current_tid), String(current_ant), String(current_rssi));
 
-		// Try to take mutex briefly to update tags[] safely
-		if (tags_mutex == nullptr)
-		{
-			// If mutex not created, fall back to previous behavior (best-effort)
-			for (int i = 0; i < max_tags; i++)
-			{
-				if (current_epc == tags[i].epc || current_tid == tags[i].tid)
-					return;
-				if (tags[i].epc == "" || tags[i].tid == "")
-					break;
-			}
-
-			tags[current_tag].epc = current_epc;
-			tags[current_tag].tid = current_tid;
-			tags[current_tag].ant_number = current_ant;
-			tags[current_tag].rssi = current_rssi;
-
-			current_tag_num();
-
-			if (buzzer_on)
-				pins.buzzer_time = millis();
-			return;
-		}
-
-		if (xSemaphoreTake(tags_mutex, (TickType_t)5) != pdTRUE)
-		{
-			// Busy, drop this tag to avoid blocking
-			return;
-		}
-
 		// Check duplicates and find empty slot
 		for (int i = 0; i < max_tags; i++)
 		{
 			if (current_epc == tags[i].epc || current_tid == tags[i].tid)
-			{
-				xSemaphoreGive(tags_mutex);
 				return;
-			}
 			if (tags[i].epc == "" || tags[i].tid == "")
 				break;
 		}
@@ -109,15 +76,11 @@ public:
 		tags[current_tag].ant_number = current_ant;
 		tags[current_tag].rssi = current_rssi;
 
-		// advance current_tag safely
 		current_tag_num();
 
 		if (buzzer_on)
 			pins.buzzer_time = millis();
 
-		xSemaphoreGive(tags_mutex);
-
-		// Display tag after releasing lock to avoid holding mutex during I/O
 		if (!always_send)
 			display_current_tag(String(tags[(current_tag == 0 ? max_tags - 1 : current_tag - 1)].epc), String(tags[(current_tag == 0 ? max_tags - 1 : current_tag - 1)].tid), String(tags[(current_tag == 0 ? max_tags - 1 : current_tag - 1)].ant_number), String(tags[(current_tag == 0 ? max_tags - 1 : current_tag - 1)].rssi));
 	}
@@ -125,17 +88,13 @@ public:
 	void tag_data_display()
 	{
 		String tags_to_send = "#tags:";
-		if (tags_mutex && xSemaphoreTake(tags_mutex, (TickType_t)10) == pdTRUE)
+		for (int i = 0; i < max_tags; i++)
 		{
-			for (int i = 0; i < max_tags; i++)
-			{
-				if (tags[i].epc == "")
-					break;
-				tags_to_send += "@" + tags[i].epc;
-			}
-			xSemaphoreGive(tags_mutex);
+			if (tags[i].epc == "")
+				break;
+			tags_to_send += "@" + tags[i].epc;
 		}
-		myserial.write(tags_to_send);
+		myserial.write(tags_to_send, true);
 
 		clear_tags();
 	}
@@ -143,34 +102,26 @@ public:
 	void tag_data_display_all()
 	{
 		String tags_to_send = "#tags:";
-		if (tags_mutex && xSemaphoreTake(tags_mutex, (TickType_t)10) == pdTRUE)
+		for (int i = 0; i < max_tags; i++)
 		{
-			for (int i = 0; i < max_tags; i++)
-			{
-				if (tags[i].epc == "")
-					break;
-				tags_to_send += "@" + tags[i].epc + "|" + tags[i].tid + "|" + tags[i].ant_number + "|" + tags[i].rssi;
-			}
-			xSemaphoreGive(tags_mutex);
+			if (tags[i].epc == "")
+				break;
+			tags_to_send += "@" + tags[i].epc + "|" + tags[i].tid + "|" + tags[i].ant_number + "|" + tags[i].rssi;
 		}
-		myserial.write(tags_to_send);
+		myserial.write(tags_to_send, true);
 		clear_tags();
 	}
 
 	void clear_tags()
 	{
-		if (tags_mutex && xSemaphoreTake(tags_mutex, (TickType_t)20) == pdTRUE)
+		for (int i = 0; i < max_tags; i++)
 		{
-			for (int i = 0; i < max_tags; i++)
-			{
-				tags[i].epc = "";
-				tags[i].tid = "";
-				tags[i].ant_number = 0;
-				tags[i].rssi = 0;
-			}
-			current_tag = 0;
-			xSemaphoreGive(tags_mutex);
+			tags[i].epc = "";
+			tags[i].tid = "";
+			tags[i].ant_number = 0;
+			tags[i].rssi = 0;
 		}
+		current_tag = 0;
 		myserial.write("#TAGS_CLEARED");
 	}
 

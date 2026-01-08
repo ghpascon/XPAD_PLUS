@@ -4,3 +4,4 @@ CRGB leds[NUM_LEDS];
 
 extern bool setup_done;
 extern bool read_on;
+extern bool eth_connected;

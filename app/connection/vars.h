@@ -22,3 +22,4 @@ extern bool dhcp_on;
 extern String static_ip;
 extern String gateway_ip;
 extern String subnet_mask;
+extern bool eth_connected;

@@ -20,7 +20,7 @@ public:
 	{
 		if (millis() < 2000)
 			return;
-		const int buzzer_time_on = 100;
+		const int buzzer_time_on = 200;
 		const int indicator_time_on = 1000;
 		(millis() - buzzer_time < buzzer_time_on && buzzer_on) ? digitalWrite(buzzer_pin, HIGH) : digitalWrite(buzzer_pin, LOW);
 		(millis() - buzzer_time < indicator_time_on && buzzer_on) ? pinMode(indicator_pin, OUTPUT) : pinMode(indicator_pin, INPUT_PULLUP);

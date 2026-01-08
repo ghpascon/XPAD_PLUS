@@ -31,7 +31,10 @@ public:
     {
         const String ssid = get_esp_name();
         const char *password = "smartx12345";
-        WiFi.softAP(ssid.c_str(), password);
+        WiFi.disconnect(true);
+        WiFi.mode(WIFI_AP);
+        WiFi.setTxPower(WIFI_POWER_19_5dBm);
+        WiFi.softAP(ssid.c_str(), password, 6, false, 2);
     }
 
     void style_web_server()

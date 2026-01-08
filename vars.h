@@ -61,8 +61,6 @@ bool fs_loaded = true;
 
 bool btConnected = false;
 bool eth_connected = false;
-// Mutex para proteger acesso ao array `tags`
-SemaphoreHandle_t tags_mutex = nullptr;
 
 // ==================== Ethernet Configuration ====================
 bool dhcp_on = false;
