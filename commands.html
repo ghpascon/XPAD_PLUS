@@ -165,6 +165,50 @@
 <li><strong>TYPE</strong>: <code>epc</code> ou <code>tid</code></li>
 <li><strong>TARGET</strong>: 24 caracteres hexadecimais para filtro</li>
 </ul>
+<h3 id="gerenciamento-avançado-de-tags">Gerenciamento Avançado de Tags </h3>
+<table>
+<thead>
+<tr>
+<th>Comando</th>
+<th>Descrição</th>
+<th>Formato</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>#change_password:[EPC];[NEW_PWD];[OLD_PWD]</code></td>
+<td>Altera senha de tag específica</td>
+<td><code>#change_password:000102030405060708090A0B;ABCD1234;00000000</code></td>
+</tr>
+<tr>
+<td><code>#protected_mode:[EPC];[PASSWORD];[ENABLE]</code></td>
+<td>Ativa/desativa modo protegido para tag específica</td>
+<td><code>#protected_mode:000102030405060708090A0B;12345678;on</code></td>
+</tr>
+<tr>
+<td><code>#protected_inventory:[ENABLE];[PASSWORD]</code></td>
+<td>Ativa/desativa inventário protegido global</td>
+<td><code>#protected_inventory:on;12345678</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Parâmetros avançados:</strong></p>
+<ul>
+<li><strong>EPC</strong>: 24 caracteres hexadecimais (12 bytes) - EPC da tag alvo</li>
+<li><strong>NEW_PWD</strong>: 8 caracteres hexadecimais (4 bytes) - Nova senha</li>
+<li><strong>OLD_PWD</strong>: 8 caracteres hexadecimais (4 bytes) - Senha atual (padrão: 00000000)</li>
+<li><strong>PASSWORD</strong>: 8 caracteres hexadecimais (4 bytes) - Senha de acesso (padrão: 00000000)</li>
+<li><strong>ENABLE</strong>: <code>on</code>/<code>off</code> ou <code>true</code>/<code>false</code> - Habilita/desabilita proteção</li>
+</ul>
+<p><strong>Respostas específicas:</strong></p>
+<ul>
+<li><code>#CHANGE_PASSWORD:OK</code> - Senha alterada com sucesso</li>
+<li><code>#PROTECTED_MODE:ENABLED</code> - Modo protegido ativado para tag específica</li>
+<li><code>#PROTECTED_MODE:DISABLED</code> - Modo protegido desativado para tag específica</li>
+<li><code>#PROTECTED_INVENTORY:ENABLED</code> - Inventário protegido ativado globalmente</li>
+<li><code>#PROTECTED_INVENTORY:DISABLED</code> - Inventário protegido desativado globalmente</li>
+<li><code>#ERROR:[DESCRIÇÃO]</code> - Erro na execução (EPC inválido, senha incorreta, etc.)</li>
+</ul>
 <hr>
 <h2 id="configuração-de-potência-e-sessão">Configuração de Potência e Sessão </h2>
 <table>
@@ -289,6 +333,11 @@
 <td>Obtém prefixo atual</td>
 <td><code>#PREFIX:[valor]</code></td>
 </tr>
+<tr>
+<td><code>#get_protected_inventory</code></td>
+<td>Obtém status do inventário protegido</td>
+<td><code>#PROTECTED_INVENTORY:[status]</code>, <code>#PROTECTED_INVENTORY_PASSWORD:[senha]</code></td>
+</tr>
 </tbody>
 </table>
 <hr>
@@ -387,6 +436,83 @@
 <li>Outros comandos são processados individualmente</li>
 </ul>
 <hr>
+<h2 id="códigos-de-resposta">Códigos de Resposta </h2>
+<table>
+<thead>
+<tr>
+<th>Resposta</th>
+<th>Significado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>#PONG</code></td>
+<td>Resposta ao ping</td>
+</tr>
+<tr>
+<td><code>#READ:ON/OFF</code></td>
+<td>Estado de leitura alterado</td>
+</tr>
+<tr>
+<td><code>#READING/#IDLE</code></td>
+<td>Estado atual de leitura</td>
+</tr>
+<tr>
+<td><code>#BUZZER:ON/OFF</code></td>
+<td>Estado do buzzer</td>
+</tr>
+<tr>
+<td><code>#CHANGE_PASSWORD:OK</code></td>
+<td>Senha alterada com sucesso</td>
+</tr>
+<tr>
+<td><code>#PROTECTED_MODE:ENABLED</code></td>
+<td>Modo protegido ativado para tag específica</td>
+</tr>
+<tr>
+<td><code>#PROTECTED_MODE:DISABLED</code></td>
+<td>Modo protegido desativado para tag específica</td>
+</tr>
+<tr>
+<td><code>#PROTECTED_INVENTORY:ENABLED</code></td>
+<td>Inventário protegido ativado globalmente</td>
+</tr>
+<tr>
+<td><code>#PROTECTED_INVENTORY:DISABLED</code></td>
+<td>Inventário protegido desativado globalmente</td>
+</tr>
+<tr>
+<td><code>#PROTECTED_INVENTORY_PASSWORD:[senha]</code></td>
+<td>Senha atual do inventário protegido</td>
+</tr>
+<tr>
+<td><code>#INVALID_CMD</code></td>
+<td>Comando não reconhecido</td>
+</tr>
+<tr>
+<td><code>#ERROR:[DESCRIÇÃO]</code></td>
+<td>Erro na execução (parâmetros inválidos, etc.)</td>
+</tr>
+<tr>
+<td><code>#SET_CMD:OK/NOK</code></td>
+<td>Resultado da configuração</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="notas-importantes">Notas Importantes </h2>
+<ol>
+<li><strong>Comandos são case-sensitive</strong> - mantenha a capitalização exata</li>
+<li><strong>Valores hexadecimais</strong> devem usar caracteres 0-9, A-F (maiúsculos ou minúsculos)</li>
+<li><strong>Separadores</strong> para múltiplos comandos: <code>|</code> (pipe)</li>
+<li><strong>Separadores</strong> para parâmetros: <code>;</code> (ponto e vírgula) ou <code>:</code> (dois pontos)</li>
+<li><strong>Configurações</strong> são aplicadas imediatamente e podem reconfigurar o reader</li>
+<li><strong>Reinicialização</strong> pode ser necessária após certas configurações</li>
+<li><strong>Funcionalidades avançadas</strong> como alteração de senhas e modo protegido requerem validação rigorosa dos parâmetros</li>
+</ol>
+<hr>
+<h2 id="suporte-técnico">Suporte Técnico </h2>
+<p>Para dúvidas técnicas ou implementação específica, consulte a documentação técnica completa ou entre em contato com o suporte.</p>
 
       </div>
       
