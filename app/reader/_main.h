@@ -101,7 +101,7 @@ public:
 
 	void clear_tags_no_read()
 	{
-		const unsigned long clear_time = 12000;
+		const unsigned long clear_time = 120000;
 		static unsigned long current_clear_time = millis();
 		static int last_tag = -1;
 		if (current_tag != last_tag)

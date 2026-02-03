@@ -74,6 +74,7 @@ public:
 		{
 			try_change_baudrate();
 			check_timeout(true);
+			current_timeout_reader_connection = millis();
 		}
 	}
 

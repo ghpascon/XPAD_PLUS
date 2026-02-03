@@ -11,7 +11,7 @@ void webhook_config_script()
               {
                   String json = "{";
                   json += "\"webhook_on\":" + String(webhook_on ? "true" : "false") + ",";
-                  json += "\"webhook_url\":\"" + webhook_url + "\",";
+                  json += "\"webhook_url\":\"" + webhook_url + "\"";
                   json += "}";
                   server.send(200, "application/json", json); });
 
@@ -33,7 +33,7 @@ void webhook_config_script()
               {
                   String json = "[";
                   json += "[\"WEBHOOK\",\"" + String(webhook_on ? "ON" : "OFF") + "\"],";
-                  json += "[\"URL\",\"" + webhook_url + "\"],";
+                  json += "[\"URL\",\"" + webhook_url + "\"]";
                   json += "]";
                   server.send(200, "application/json", json); });
 }

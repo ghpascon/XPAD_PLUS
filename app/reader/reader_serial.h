@@ -103,7 +103,10 @@ private:
 			}
 
 			if (!setup_done)
+			{
 				step++;
+				myserial.write("#STEP:" + String(step));
+			}
 		}
 		else
 		{
