@@ -139,10 +139,6 @@ private:
 		{
 			webhook_url = parameter.substring(parameter.indexOf(":") + 1);
 		}
-		else if (parameter.startsWith("device_name:"))
-		{
-			device_name = parameter.substring(parameter.indexOf(":") + 1);
-		}
 		else if (parameter.startsWith("prefix:"))
 		{
 			prefix = parameter.substring(parameter.indexOf(":") + 1);
@@ -206,7 +202,6 @@ public:
 		// Webhook
 		new_config += "webhook_on:" + String(webhook_on ? "on" : "off") + "\n";
 		new_config += "webhook_url:" + webhook_url + "\n";
-		new_config += "device_name:" + device_name + "\n";
 		new_config += "prefix:" + prefix + "\n";
 		// Protected Inventory
 		new_config += "protected_inventory_enabled:" + String(protected_inventory_enabled ? "on" : "off") + "\n";

@@ -18,7 +18,6 @@ gateway_ip:192.168.1.1
 subnet_mask:255.255.255.0
 webhook_on:off
 webhook_url:http://192.168.1.10:5001
-device_name:xpad_plus
 prefix:
 protected_inventory_enabled:off
 protected_inventory_password:00000000

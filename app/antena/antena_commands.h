@@ -24,4 +24,12 @@ public:
 
 		myserial.write("#READ_POWER:" + String(set_power, DEC));
 	}
+
+	void decrease_power(int qtd = 1)
+	{
+		for (int i = 0; i < ant_qtd; i++)
+		{
+			antena[i].power = max(antena[i].power - qtd, min_power);
+		}
+	}
 };

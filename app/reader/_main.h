@@ -91,7 +91,7 @@ public:
 
 	void periodic_reader_loop()
 	{
-		const int periodic_time = 30000;
+		const int periodic_time = 120000;
 		static unsigned long current_periodic_time = -periodic_time;
 		if (millis() - current_periodic_time < periodic_time)
 			return;
@@ -101,7 +101,7 @@ public:
 
 	void clear_tags_no_read()
 	{
-		const unsigned long clear_time = 30000;
+		const unsigned long clear_time = 12000;
 		static unsigned long current_clear_time = millis();
 		static int last_tag = -1;
 		if (current_tag != last_tag)

@@ -12,7 +12,6 @@ void webhook_config_script()
                   String json = "{";
                   json += "\"webhook_on\":" + String(webhook_on ? "true" : "false") + ",";
                   json += "\"webhook_url\":\"" + webhook_url + "\",";
-                  json += "\"device_name\":\"" + device_name + "\"";
                   json += "}";
                   server.send(200, "application/json", json); });
 
@@ -26,10 +25,6 @@ void webhook_config_script()
                   {
                       webhook_url = server.arg("webhook_url");
                   }
-                  if (server.hasArg("device_name"))
-                  {
-                      device_name = server.arg("device_name");
-                  }
                   config_file_commands.save_config();
                   server.sendHeader("Location", "/webhook_config");
                   server.send(303); });
@@ -39,7 +34,6 @@ void webhook_config_script()
                   String json = "[";
                   json += "[\"WEBHOOK\",\"" + String(webhook_on ? "ON" : "OFF") + "\"],";
                   json += "[\"URL\",\"" + webhook_url + "\"],";
-                  json += "[\"DEVICE NAME\",\"" + device_name + "\"]";
                   json += "]";
                   server.send(200, "application/json", json); });
 }

@@ -4,7 +4,6 @@
 
 extern bool webhook_on;
 extern String webhook_url;
-extern String device_name;
 extern bool eth_connected;
 extern const int max_tags;
 extern TAG tags[];
@@ -99,7 +98,7 @@ private:
         if (total <= 0)
         {
             // Send keep-alive event as a single-element events array when there are no tags
-            payload = "[{\"device\":\"" + device_name + "\",\"event_type\":\"keep_alive\",\"event_data\":{}}]";
+            payload = "[{\"device\":\"" + get_esp_name() + "\",\"event_type\":\"keep_alive\",\"event_data\":{}}]";
             (void)send_payload(payload);
             return;
         }
@@ -116,10 +115,9 @@ private:
                 if (i > 0)
                     payload += ",";
                 const TAG &t = tags[offset + i];
-                payload += "{\"device\":\"" + device_name + "\","; // event envelope
+                payload += "{\"device\":\"" + get_esp_name() + "\","; // event envelope
                 payload += "\"event_type\":\"tag\",";
                 payload += "\"event_data\":{"; // tag object
-                payload += "\"device\":\"" + device_name + "\",";
                 payload += "\"epc\":\"" + t.epc + "\",";
                 payload += "\"tid\":\"" + t.tid + "\",";
                 payload += "\"ant\":" + String(t.ant_number) + ",";

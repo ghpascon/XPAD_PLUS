@@ -15,5 +15,3 @@ public:
         write_bytes(reader_read_on_command, sizeof(reader_read_on_command), crc1, crc2);
     }
 };
-
-
