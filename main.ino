@@ -95,6 +95,8 @@ void loop()
     // Process serial communication
     myserial.loop();
 
+    tag_commands.ensure_protect_mode_correct();
+
     // Process reader module (Core 1)
     reader_module.functions();
     myserialcheck.loop();

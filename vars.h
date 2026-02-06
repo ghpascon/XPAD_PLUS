@@ -78,3 +78,4 @@ String prefix = "";
 // ==================== Protected Inventory ====================
 bool protected_inventory_enabled = false;
 String protected_inventory_password = "00000000";
+bool reader_in_protected_inventory = false;

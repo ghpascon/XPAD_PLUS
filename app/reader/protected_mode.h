@@ -101,5 +101,7 @@ public:
             crc1,
             crc2,
             false);
+
+        reader_in_protected_inventory = enable;
     }
 };

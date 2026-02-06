@@ -7,34 +7,33 @@ public:
     void loop()
     {
         // Lê o input da serial
-        String input = myserial.check_serial();
+        String cmd = myserial.check_serial();
 
-        if (input.length() > 0)
+        if (cmd.length() > 0)
         {
             // Se for um set_cmd, envia tudo de uma vez
-            if (input.startsWith("#set_cmd:"))
+            if (cmd.startsWith("#set_cmd:"))
             {
-                check_commands(input);
+                check_commands(cmd);
                 return; // não continua separando
             }
 
             int startIndex = 0;
-            int separatorIndex = input.indexOf('|');
-
-            // Loop para processar todos os comandos separados por '|'
-            while (separatorIndex != -1)
+            int separatorIndex = cmd.indexOf('#');
+            bool last_cmd = false;
+            // Loop para processar todos os comandos separados por '#'
+            while (true)
             {
-                String cmd = input.substring(startIndex, separatorIndex);
-                check_commands(cmd); // Processa o comando
-                startIndex = separatorIndex + 1;
-                separatorIndex = input.indexOf('|', startIndex);
-            }
-
-            // Processa o último comando (ou o único, se não houver '|')
-            String lastCmd = input.substring(startIndex);
-            if (lastCmd.length() > 0)
-            {
-                check_commands(lastCmd);
+                separatorIndex = cmd.indexOf('#', startIndex + 1);
+                if (separatorIndex == -1)
+                {
+                    separatorIndex = cmd.length();
+                    last_cmd = true;
+                }
+                check_commands(cmd.substring(startIndex, separatorIndex)); // Processa o comando
+                startIndex = separatorIndex;
+                if (last_cmd)
+                    break;
             }
         }
     }
@@ -215,12 +214,14 @@ private:
         // enable + password
         myserial.write(String(enable) + " " + password);
 
-        reader_module.setup_reader();
+        reader_module.protected_inventory(enable, password);
     }
 
 public:
     void check_commands(String cmd)
     {
+        if (cmd.length() == 0)
+            return;
         // ================= Comandos Gerais =================
         if (cmd == "#ping" || cmd == "ping")
         {
@@ -229,10 +230,12 @@ public:
         else if (cmd == "#read:on" || cmd == "readtag on")
         {
             read_on = true;
+            myserial.write("#READ:" + String(read_on ? "on" : "off"));
         }
         else if (cmd == "#read:off" || cmd == "readtag off")
         {
             read_on = false;
+            myserial.write("#READ:" + String(read_on ? "on" : "off"));
         }
         else if (cmd == "#get_tags")
         {
@@ -245,6 +248,7 @@ public:
         else if (cmd == "#clear")
         {
             tag_commands.clear_tags();
+            myserial.write("#TAGS_CLEARED");
         }
         else if (cmd.startsWith("#write:"))
         {
@@ -288,7 +292,6 @@ public:
             String v = cmd.substring(String("#prefix:").length());
             v.trim();
             prefix = v;
-            config_file_commands.save_config();
             myserial.write("#PREFIX:" + prefix);
         }
         else if (cmd == "#get_prefix")
@@ -320,7 +323,8 @@ public:
             byte current_rssi = ant_cmd.toInt();
             current_power = constrain(current_power, min_power, max_power);
             current_rssi = max(current_rssi, min_rssi);
-            antena_commands.set_antena(current_ant, (current_active == "on"), current_power, current_rssi);
+            antena_commands.set_antena(current_ant, String(current_active == "on"), current_power, current_rssi);
+            myserial.write("#ANT_CONFIGURED:" + String(current_ant) + "," + String(current_active == "on" ? "on" : "off") + "," + String(current_power) + "," + String(current_rssi));
         }
         else if (cmd.startsWith("#session:"))
         {
@@ -328,15 +332,18 @@ public:
             session = val.toInt();
             if (session > max_session)
                 session = 0x00;
+            myserial.write("#SESSION:" + String(session));
         }
         else if (cmd.startsWith("#read_power:"))
         {
             String val = cmd.substring(12);
             antena_commands.set_power_all(val.toInt());
+            myserial.write("#POWER:" + String(val.toInt()));
         }
         else if (cmd.startsWith("#buzzer:"))
         {
             buzzer_on = cmd.endsWith("on");
+            myserial.write("#BUZZER:" + String(buzzer_on ? "on" : "off"));
         }
         else if (cmd.startsWith("#gpi_stop_delay:"))
         {
@@ -346,41 +353,53 @@ public:
         else if (cmd.startsWith("#decode_gtin:"))
         {
             decode_gtin = cmd.endsWith("on");
+            myserial.write("#DECODE_GTIN:" + String(decode_gtin ? "on" : "off"));
         }
         else if (cmd.startsWith("#start_reading:"))
         {
             start_reading = cmd.endsWith("on");
+            read_on = start_reading;
+            myserial.write("#START_READING:" + String(read_on ? "on" : "off"));
         }
         else if (cmd.startsWith("#gpi_start:"))
         {
             gpi_start = cmd.endsWith("on");
+            myserial.write("#GPI_START:" + String(gpi_start ? "on" : "off"));
         }
         else if (cmd.startsWith("#always_send:"))
         {
             always_send = cmd.endsWith("on");
+            myserial.write("#ALWAYS_SEND:" + String(always_send ? "on" : "off"));
         }
         else if (cmd.startsWith("#simple_send:"))
         {
             simple_send = cmd.endsWith("on");
+            myserial.write("#SIMPLE_SEND:" + String(simple_send ? "on" : "off"));
         }
         else if (cmd.startsWith("#keyboard:"))
         {
             keyboard = cmd.endsWith("on");
+            myserial.write("#KEYBOARD:" + String(keyboard ? "on" : "off"));
         }
 
         // ================= Comandos de Modo =================
         else if (cmd.startsWith("readmode"))
         {
             keyboard = cmd.endsWith("hid");
+            myserial.write("#READ_MODE:" + String(keyboard ? "HID" : "USB"));
         }
         else if (cmd.startsWith("initreadtag:"))
+
         {
             start_reading = cmd.endsWith("on");
+            read_on = start_reading;
+            myserial.write("#INIT_READ_TAG:" + String(read_on ? "on" : "off"));
         }
         else if (cmd.startsWith("readpower:"))
         {
             String val = cmd.substring(10);
             antena_commands.set_power_all(val.toInt());
+            myserial.write("#READ_POWER:" + String(val.toInt()));
         }
         else if (cmd.startsWith("gen2session:"))
         {
@@ -388,6 +407,7 @@ public:
             session = lastCharStr.toInt();
             if (session > max_session)
                 session = 0x00;
+            myserial.write("#GEN2_SESSION:" + String(session));
         }
 
         // ================= Comandos Protegidos =================
@@ -398,6 +418,7 @@ public:
         else if (cmd.startsWith("#protected_inventory:"))
         {
             protected_inventory_cmd(cmd);
+            myserial.write("#PROTECTED_INVENTORY:" + String(protected_inventory_enabled ? "ENABLED" : "DISABLED"));
         }
         else if (cmd == "#get_protected_inventory")
         {
@@ -426,10 +447,22 @@ public:
             }
         }
 
+        // ================= Setup =================
+        else if (cmd == "#setup_reader")
+        {
+            reader_module.setup_reader();
+            myserial.write("#SETUP_STARTED");
+        }
+
+        else if (cmd.startsWith("#hotspot"))
+        {
+            hotspot_on = cmd.endsWith("on");
+            myserial.write("#HOTSPOT:" + String(hotspot_on ? "ON" : "OFF"));
+        }
         // ================= Fallback =================
         else
         {
-            myserial.write("#INVALID_CMD");
+            myserial.write("#INVALID_CMD: " + cmd);
         }
     }
 };

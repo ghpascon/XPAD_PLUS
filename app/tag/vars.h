@@ -17,3 +17,5 @@ extern bool buzzer_on;
 extern bool decode_gtin;
 
 extern String prefix;
+
+extern bool reader_in_protected_inventory;

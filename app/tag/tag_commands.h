@@ -4,6 +4,22 @@
 class TAG_COMMANDS
 {
 public:
+	bool send_protect_mode = false;
+	void ensure_protect_mode_correct()
+	{
+		static unsigned long current_time = 0;
+		if (!reader_in_protected_inventory)
+			current_time = millis();
+		if (millis() - current_time > 500)
+		{
+			send_protect_mode = true;
+		}
+		else
+		{
+			send_protect_mode = false;
+		}
+	}
+
 	void add_tag(String current_epc, String current_tid, int current_ant, int current_rssi)
 	{
 		// quick checks that don't need tags[] lock
@@ -138,7 +154,7 @@ private:
 		if (epc == "")
 			return;
 		if (!simple_send)
-			myserial.write("#T+@" + epc + "|" + tid + "|" + ant + "|" + rssi);
+			myserial.write("#T+@" + epc + "|" + tid + "|" + ant + "|" + rssi + "|" + (send_protect_mode ? "on" : "off"));
 		else
 			myserial.write(epc, true);
 	}
