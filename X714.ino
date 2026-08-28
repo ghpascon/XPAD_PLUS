@@ -157,4 +157,5 @@ void loop()
         // Webhook tick
         webhook.loop();
     }
+    delay(10); // Small delay to prevent task from starving other processes
 }
