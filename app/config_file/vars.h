@@ -42,3 +42,4 @@ extern String wifi_password;
 extern bool fs_loaded;
 
 extern String write_prefix;
+extern int read_interval;

@@ -26,6 +26,7 @@ PINS pins;
 
 // ==================== Leitor ====================
 READER reader_module;
+int read_interval = 100;
 
 // ==================== Servidor Web ====================
 WEB_SERVER web_server;

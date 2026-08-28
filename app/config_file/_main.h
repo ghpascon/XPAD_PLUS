@@ -266,6 +266,15 @@ private:
 			handled = true;
 			return true;
 		}
+		else if (parameter.startsWith("read_interval:"))
+		{
+			parameter.replace("read_interval:", "");
+			read_interval = parameter.toInt();
+			if (read_interval < 50)
+				read_interval = 50; // mínimo 50ms
+			handled = true;
+			return true;
+		}
 		// ==================== Webhook ====================
 		else if (parameter.startsWith("webhook_on:"))
 		{
@@ -385,6 +394,7 @@ public:
 		new_config += "static_ip:" + static_ip + "\n";
 		new_config += "gateway_ip:" + gateway_ip + "\n";
 		new_config += "subnet_mask:" + subnet_mask + "\n";
+		new_config += "read_interval:" + String(read_interval) + "\n";
 		// Webhook
 		new_config += "webhook_on:" + String(webhook_on ? "on" : "off") + "\n";
 		new_config += "webhook_url:" + webhook_url + "\n";
