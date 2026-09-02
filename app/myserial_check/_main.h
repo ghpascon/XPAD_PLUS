@@ -256,7 +256,7 @@ public:
         }
         else if (cmd == "#get_power")
         {
-            myserial.write("#POWER:" + String(antena[0].power));
+            myserial.write("#ANT_POWER:" + String(antena[0].power));
         }
         else if (cmd == "#get_session")
         {

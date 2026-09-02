@@ -42,3 +42,5 @@ unsigned long last_valid_frame_ms = 0; // last frame received in multi-response 
 unsigned long setup_transition_until_ms = 0;
 
 extern const bool debug_mode;
+
+extern PINS pins;

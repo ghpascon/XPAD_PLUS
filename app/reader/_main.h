@@ -188,6 +188,7 @@ public:
 			myserial.write("#SETUP_DONE");
 			myserial.write("#NAME:" + get_esp_name());
 			myserial.write("#VERSION:" + String(VERSION));
+            myserial.write("#POWER:" + pins.get_power_supply_state());
 			setup_done = true;
 			had_valid_frame = true; // confirmed reader speaks 115200: skip baud-change on reconnect
 			reconnect_count = 0;
